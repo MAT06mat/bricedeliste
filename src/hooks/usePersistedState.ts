@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export function usePersistedState<T>(
     key: string,
@@ -10,15 +10,57 @@ export function usePersistedState<T>(
             try {
                 return JSON.parse(saved) as T;
             } catch (error) {
-                console.warn(`Erreur de parsing localStorage[${key}] :`, error);
+                console.warn(`Error parsing localStorage[${key}] :`, error);
             }
         }
         return defaultValue;
     });
 
-    useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(state));
-    }, [key, state]);
+    // Custom setter to dispatch a sync event
+    const setPersistedState: React.Dispatch<React.SetStateAction<T>> =
+        useCallback(
+            (value) => {
+                setState((prevState) => {
+                    const newState =
+                        value instanceof Function ? value(prevState) : value;
+                    localStorage.setItem(key, JSON.stringify(newState));
 
-    return [state, setState];
+                    // Dispatch custom event to notify other instances of this hook
+                    window.dispatchEvent(
+                        new CustomEvent("local-storage-sync", {
+                            detail: { key, newValue: newState },
+                        })
+                    );
+
+                    return newState;
+                });
+            },
+            [key]
+        );
+
+    useEffect(() => {
+        // Listener for the custom event to sync state across components
+        const handleSync = (event: any) => {
+            if (event.detail.key === key) {
+                setState(event.detail.newValue);
+            }
+        };
+
+        // Listener for cross-tab sync (native storage event)
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === key && event.newValue) {
+                setState(JSON.parse(event.newValue));
+            }
+        };
+
+        window.addEventListener("local-storage-sync", handleSync);
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("local-storage-sync", handleSync);
+            window.removeEventListener("storage", handleStorageChange);
+        };
+    }, [key]);
+
+    return [state, setPersistedState];
 }
