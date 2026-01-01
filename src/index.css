@@ -1,0 +1,42 @@
+@theme {
+    --color-brice-yellow: #ffed00;
+    --color-brice-blue: #00a8e8;
+}
+
+@import "tailwindcss";
+
+body {
+    @apply bg-cyan-500 text-gray-900 font-sans;
+    background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80");
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+@theme {
+    --color-brice-yellow: #ffed00;
+    --color-brice-blue: #00a8e8;
+    --color-sand: #f4ece1;
+}
+
+.vintage-card {
+    @apply bg-sand/90 backdrop-blur-sm border-2 border-amber-900/10 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)];
+}
+
+.brice-button {
+    @apply transition-all duration-200 active:scale-95 active:shadow-none hover:-translate-y-1;
+}
+
+/* Loading wave animation */
+@keyframes wave {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.wave-anim {
+    animation: wave 1s ease-in-out infinite;
+}

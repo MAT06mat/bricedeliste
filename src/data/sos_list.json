@@ -1,0 +1,17 @@
+[
+    {
+        "id": "crepes",
+        "name": "La Crêpe Piégée",
+        "description": "On livre une crêpe, mais elle est remplie de moutarde."
+    },
+    {
+        "id": "mime",
+        "name": "Le Mime Insupportable",
+        "description": "Un membre vient mimer tous les faits et gestes de la cible pendant 5 min."
+    },
+    {
+        "id": "yellow_card",
+        "name": "Le Casse de Brice",
+        "description": "On vient voir la personne et on lui met un vent mémorable devant tout le monde."
+    }
+]
