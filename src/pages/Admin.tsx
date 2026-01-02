@@ -235,7 +235,7 @@ export default function Admin() {
                             >
                                 {/* Header de la carte Adaptatif */}
                                 <div
-                                    className="p-3 md:p-4 cursor-pointer flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2"
+                                    className="p-3 md:p-4 cursor-pointer flex flex-row justify-between items-center gap-2"
                                     onClick={() =>
                                         setExpandedIndex(
                                             expandedIndex === o.originalIndex
@@ -276,7 +276,7 @@ export default function Admin() {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="flex items-center justify-between w-full sm:w-auto gap-3">
+                                    <div className="flex items-center justify-between w-content gap-3">
                                         <div className="flex gap-2">
                                             {isCompleted ? (
                                                 <span className="text-[8px] md:text-[10px] font-black text-green-700 bg-green-100 px-2 py-1 rounded uppercase">
@@ -284,7 +284,7 @@ export default function Admin() {
                                                 </span>
                                             ) : (
                                                 o.assigned_to && (
-                                                    <span className="text-[8px] md:text-[10px] bg-cyan-500 text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter italic">
+                                                    <span className="text-[8px] md:text-[10px] min-w-max bg-cyan-500 text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter italic">
                                                         🏄‍♂️{" "}
                                                         {
                                                             o.assigned_to.split(
