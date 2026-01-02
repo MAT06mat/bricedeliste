@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter, Routes, Route } from "react-router";
+import { Routes, Route, BrowserRouter } from "react-router";
 import { AuthProvider } from "./context/AuthProvider";
 import App from "./App";
 import Home from "./pages/Home";
@@ -13,7 +13,7 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <AuthProvider>
-            <HashRouter>
+            <BrowserRouter basename="/bricedeliste">
                 <Routes>
                     <Route path="/" element={<App />}>
                         <Route index element={<Home />} />
@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
-            </HashRouter>
+            </BrowserRouter>
         </AuthProvider>
     </React.StrictMode>
 );
