@@ -13,11 +13,9 @@ export default function App() {
     const closeMenu = () => setIsMenuOpen(false);
 
     return (
-        <div className="min-h-screen flex flex-col items-center bg-cyan-500 page-background">
-            {/* Sticky Navigation Bar */}
+        <div className="min-h-screen flex flex-col items-center bg-cyan-500 pb-5 page-background">
             <nav className="fixed top-0 w-full z-50 bg-brice-yellow border-b-4 border-yellow-600 shadow-xl px-4 py-3">
                 <div className="max-w-5xl mx-auto flex justify-between items-center">
-                    {/* Logo */}
                     <Link
                         to="/"
                         onClick={closeMenu}

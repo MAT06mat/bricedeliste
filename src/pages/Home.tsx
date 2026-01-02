@@ -13,7 +13,30 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Main Content Card */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                {[
+                    {
+                        title: "Jaune",
+                        desc: "Plus qu'une couleur, une religion.",
+                    },
+                    { title: "Casser", desc: "Notre sport national favori." },
+                    {
+                        title: "Le Spot",
+                        desc: "L'INSA, c'est notre Nice à nous.",
+                    },
+                ].map((item, idx) => (
+                    <div
+                        key={idx}
+                        className="vintage-card p-4 rounded-2xl rotate-1 hover:rotate-0 transition-transform"
+                    >
+                        <h3 className="font-black text-amber-900 uppercase italic">
+                            {item.title}
+                        </h3>
+                        <p className="text-xs text-amber-700">{item.desc}</p>
+                    </div>
+                ))}
+            </div>
+
             <div className="vintage-card p-1 md:p-8 rounded-[40px] max-w-3xl mx-auto overflow-hidden">
                 <div className="bg-white/50 rounded-[32px] p-6 md:p-10 border-2 border-dashed border-amber-900/20">
                     <h2 className="text-3xl font-black mb-4 text-amber-900 italic uppercase">
@@ -21,9 +44,10 @@ export default function Home() {
                     </h2>
 
                     <p className="mb-8 text-lg text-amber-800 font-medium leading-relaxed">
-                        Bienvenue sur le spot de la liste CDP la plus cassante de l'INSA Lyon.
-                        On n'attend pas la vague, on la crée. Prépare tes meilleurs vents,
-                        car ici, on est là pour gagner (et surtout pour casser).
+                        Bienvenue sur le spot de la liste CDP la plus cassante
+                        de l'INSA Lyon. On n'attend pas la vague, on la crée.
+                        Prépare tes meilleurs vents, car ici, on est là pour
+                        gagner (et surtout pour casser).
                     </p>
 
                     {/* Video Container */}
@@ -46,20 +70,6 @@ export default function Home() {
                         <div className="h-2 w-2 rounded-full bg-brice-yellow opacity-30"></div>
                     </div>
                 </div>
-            </div>
-
-            {/* Sub-section / Values */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto pb-10">
-                {[
-                    { title: "Jaune", desc: "Plus qu'une couleur, une religion." },
-                    { title: "Casser", desc: "Notre sport national favori." },
-                    { title: "Le Spot", desc: "L'INSA, c'est notre Nice à nous." }
-                ].map((item, idx) => (
-                    <div key={idx} className="vintage-card p-4 rounded-2xl rotate-1 hover:rotate-0 transition-transform">
-                        <h3 className="font-black text-amber-900 uppercase italic">{item.title}</h3>
-                        <p className="text-xs text-amber-700">{item.desc}</p>
-                    </div>
-                ))}
             </div>
         </div>
     );
