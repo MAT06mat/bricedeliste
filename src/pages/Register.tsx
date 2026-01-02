@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { Link } from "react-router";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 
@@ -14,7 +14,6 @@ export default function Register() {
         message: string;
         type: "success" | "error";
     } | null>(null);
-    const navigate = useNavigate();
 
     const showToast = (
         message: string,
@@ -38,8 +37,6 @@ export default function Register() {
                 "Compte créé ! Un admin doit maintenant te valider.",
                 "success"
             );
-            // Redirect to admin login after a short delay
-            setTimeout(() => navigate("/admin"), 3000);
         } catch (err: unknown) {
             const errorMessage =
                 err instanceof Error
