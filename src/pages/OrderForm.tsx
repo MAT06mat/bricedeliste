@@ -76,7 +76,8 @@ export default function OrderForm() {
                         onClick={() => setIsSubmitted(false)}
                         className="bg-brice-yellow text-amber-900 font-black px-8 py-4 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] hover:scale-105 transition-transform"
                     >
-                        ENVOYER UN AUTRE SOS
+                        ENVOYER UN AUTRE SOS{" "}
+                        <span className="text-[10px]">(max 2/pers.)</span>
                     </button>
                     <div className="mt-6">
                         <Link

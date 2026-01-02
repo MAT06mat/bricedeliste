@@ -41,7 +41,7 @@ export default function Admin() {
             let data = null;
             if (isLoggedIn) data = await apiService.getOrders(auth);
             else data = await apiService.getOrders(tempAuth);
-            if (data) setOrders(data);
+            if (data && typeof data === typeof []) setOrders(data);
             if (data && !isLoggedIn) login(tempAuth);
         } catch {
             showToast("C'est cassé ! Vérifie tes accès.", "error");
@@ -50,12 +50,19 @@ export default function Admin() {
         }
     };
 
+    useState(() => {
+        if (isLoggedIn) fetchOrders();
+    });
+
     const handleAction = async (
         index: number,
         action: "delete" | "assign" | "unassign" | "complete"
     ) => {
         try {
-            if (action === "delete") await apiService.deleteOrder(index);
+            if (action === "delete") {
+                await apiService.deleteOrder(index);
+                setExpandedIndex(null);
+            }
             if (action === "assign") await apiService.assignOrder(index);
             if (action === "unassign") await apiService.unassignOrder(index);
             if (action === "complete") await apiService.toggleComplete(index);
@@ -66,6 +73,7 @@ export default function Admin() {
     };
 
     const filteredAndSortedOrders = useMemo(() => {
+        if (typeof orders !== typeof []) return [];
         let result = [...orders].map((o, originalIndex) => ({
             ...o,
             originalIndex,

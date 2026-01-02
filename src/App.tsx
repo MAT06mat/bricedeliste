@@ -13,7 +13,7 @@ export default function App() {
     const closeMenu = () => setIsMenuOpen(false);
 
     return (
-        <div className="min-h-screen flex flex-col items-center bg-cyan-500 pb-10 page-background">
+        <div className="h-[100svh] flex flex-col items-center page-background">
             <nav className="fixed top-0 w-full z-50 bg-brice-yellow border-b-4 border-yellow-600 shadow-xl px-4 py-3">
                 <div className="max-w-5xl mx-auto flex justify-between items-center">
                     <Link
@@ -175,7 +175,7 @@ export default function App() {
                 </div>
             </nav>
 
-            <main className="container mx-auto p-4 md:p-8 pt-24 md:pt-32">
+            <main className="container mx-auto p-4 md:p-8 pt-24 md:pt-32 z-20">
                 <Outlet />
             </main>
         </div>

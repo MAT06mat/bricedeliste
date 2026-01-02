@@ -3,22 +3,32 @@
 html,
 body {
     @apply text-gray-900 font-sans;
+    overscroll-behavior-y: auto;
+    overflow-x: hidden;
+    min-height: 100dvh;
     background-color: #ffed00;
-    height: 100svh;
-    overflow-y: hidden;
 }
 
-.page-background {
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #00a8e8;
     background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80");
     background-attachment: fixed;
     background-size: cover;
-
-    height: 100svh;
-    overflow-y: auto;
 }
 
-.page-background::-webkit-scrollbar {
+*::-webkit-scrollbar {
     display: none;
+}
+
+.page-background {
+    overflow-y: auto;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 2rem);
 }
 
 @theme {
