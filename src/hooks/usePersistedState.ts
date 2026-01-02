@@ -40,9 +40,10 @@ export function usePersistedState<T>(
 
     useEffect(() => {
         // Listener for the custom event to sync state across components
-        const handleSync = (event: any) => {
-            if (event.detail.key === key) {
-                setState(event.detail.newValue);
+        const handleSync = (event: Event) => {
+            const customEvent = event as CustomEvent;
+            if (customEvent.detail.key === key) {
+                setState(customEvent.detail.newValue);
             }
         };
 
