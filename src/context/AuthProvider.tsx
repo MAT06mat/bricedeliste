@@ -14,7 +14,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
     const [isLoggedIn, setIsLoggedIn] = usePersistedState<boolean>(
         LOGGED_IN_KEY,
-        true
+        false
     );
 
     const login = (authData: Auth) => {
