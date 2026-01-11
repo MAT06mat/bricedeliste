@@ -1,20 +1,22 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePersistedState } from "../hooks/usePersistedState";
 import type { sos } from "../types/sos";
 import sosData from "../data/sos_list.json";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 type FilterStatus = "all" | "assigned" | "unassigned";
 type SortKey = "date" | "type" | "target";
 
 export default function Admin() {
     const { login, isLoggedIn, auth } = useAuth();
-    const [tempAuth, setTempAuth] = useState({ email: "", pass: "" });
+    const [tempAuth] = useState({ email: "", pass: "" });
     const [orders, setOrders] = usePersistedState<sos[]>("orders", []);
     const [isLoading, setIsLoading] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+    const navigate = useNavigate();
 
     const [filterStatus, setFilterStatus] = usePersistedState<FilterStatus>(
         "filterStatus",
@@ -35,7 +37,7 @@ export default function Admin() {
         setTimeout(() => setToast(null), 3000);
     };
 
-    const fetchOrders = async () => {
+    const fetchOrders = useCallback(async () => {
         setIsLoading(true);
         try {
             let data = null;
@@ -48,11 +50,12 @@ export default function Admin() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [isLoggedIn, auth, tempAuth, login, setOrders]);
 
-    useState(() => {
+    useEffect(() => {
         if (isLoggedIn) fetchOrders();
-    });
+        else setTimeout(() => navigate("/login"), 0);
+    }, [isLoggedIn, fetchOrders, navigate]);
 
     const handleAction = async (
         index: number,
@@ -98,61 +101,7 @@ export default function Admin() {
         return result;
     }, [orders, filterStatus, sortBy]);
 
-    if (!isLoggedIn) {
-        return (
-            <div className="px-4 w-full">
-                <div className="max-w-md mx-auto vintage-card p-6 md:p-10 rounded-3xl mt-10 md:mt-20 border-t-8 border-brice-yellow">
-                    <h2 className="text-2xl md:text-3xl font-black mb-8 text-amber-900 italic text-center">
-                        LOGIN ADMIN
-                    </h2>
-                    <div className="space-y-4">
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            className="w-full bg-white/50 border-2 border-amber-200 p-3 rounded-xl outline-none focus:border-brice-yellow"
-                            onChange={(e) =>
-                                setTempAuth((tauth) => ({
-                                    ...tauth,
-                                    email: e.target.value,
-                                }))
-                            }
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            className="w-full bg-white/50 border-2 border-amber-200 p-3 rounded-xl outline-none focus:border-brice-yellow"
-                            onChange={(e) =>
-                                setTempAuth((tauth) => ({
-                                    ...tauth,
-                                    pass: e.target.value,
-                                }))
-                            }
-                        />
-                        <button
-                            onClick={fetchOrders}
-                            disabled={isLoading}
-                            className="w-full bg-brice-yellow text-amber-900 font-black py-4 rounded-xl shadow-[0_4px_0_0_#b49600] brice-button"
-                        >
-                            {isLoading ? (
-                                <span className="wave-anim italic">
-                                    En plein surf...
-                                </span>
-                            ) : (
-                                "SE CONNECTER"
-                            )}
-                        </button>
-                    </div>
-                </div>
-                {toast && (
-                    <Toast
-                        message={toast.message}
-                        type={toast.type}
-                        onClose={() => setToast(null)}
-                    />
-                )}
-            </div>
-        );
-    }
+    if (!isLoggedIn) return null;
 
     return (
         <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 md:px-4 pb-8">

@@ -9,9 +9,13 @@ export default function NotFound() {
                 </div>
 
                 <div className="relative z-10">
-                    <h1 className="text-7xl md:text-9xl font-black text-amber-900 italic uppercase tracking-tighter mb-4">
+                    <h1 className="text-7xl md:text-9xl font-black text-amber-900 italic uppercase tracking-tighter mb-2">
                         CASSÉ !
                     </h1>
+
+                    <p className="text-amber-700 font-bold italic mb-2 leading-relaxed">
+                        Erreur "casse en quatre"
+                    </p>
 
                     <div className="h-1 w-32 bg-brice-yellow mx-auto mb-8"></div>
 
@@ -21,7 +25,7 @@ export default function NotFound() {
                     <p className="text-amber-700 italic mb-10 leading-relaxed">
                         Cette page n'existe pas. Tu t'es mangé le récif en plein
                         vol. <br />
-                        T'es comme le "H" de Hawaii : tu sers à rien !
+                        T'es comme le "H" de INSA'Hawaii : tu sers à rien !
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -29,15 +33,8 @@ export default function NotFound() {
                             to="/"
                             className="w-full sm:w-auto bg-brice-yellow text-amber-900 font-black px-10 py-4 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-lg italic uppercase tracking-widest"
                         >
-                            RETOUR AU SPOT 🏄‍♂️
+                            Retour à la plage 🏄‍♂️
                         </Link>
-
-                        <button
-                            onClick={() => window.history.back()}
-                            className="text-amber-600 font-bold text-sm underline hover:text-amber-900 transition-colors italic"
-                        >
-                            Revenir en arrière
-                        </button>
                     </div>
                 </div>
             </div>
