@@ -1,6 +1,7 @@
 import type { Auth } from "../context/AuthContext";
 import { API_URL, REGISTER_URL } from "../data/api";
 import type { sos } from "../types/sos";
+import type { StatsData } from "../types/stats";
 import type { User } from "../types/user";
 
 /**
@@ -120,5 +121,17 @@ export const apiService = {
         request({
             method: "POST",
             body: { action: "delete_user", email },
+        }),
+
+    // Get stats
+    getStats: (): Promise<StatsData> =>
+        request({
+            method: "GET",
+            action: "get_stats",
+        }),
+    resetAll: (): Promise<void> =>
+        request({
+            method: "POST",
+            body: { action: "reset_all" },
         }),
 };

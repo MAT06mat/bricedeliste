@@ -41,7 +41,7 @@ export default function SuperAdmin() {
 
     useEffect(() => {
         if (isLoggedIn && super_admin) fetchUsers();
-        else if (!isLoggedIn) setTimeout(() => navigate("/admin"), 0);
+        else if (!isLoggedIn) setTimeout(() => navigate("/login"), 0);
     }, [isLoggedIn, super_admin, fetchUsers, navigate]);
 
     users.sort((a, b) => {

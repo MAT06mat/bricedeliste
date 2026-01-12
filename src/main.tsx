@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import "./index.css";
 import Login from "./pages/Login";
 import SuperAdmin from "./pages/SuperAdmin";
+import Stats from "./pages/Stats";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         <Route path="commander" element={<OrderForm />} />
                         <Route path="login" element={<Login />} />
                         <Route path="admin" element={<Admin />} />
+                        <Route path="stats" element={<Stats />} />
                         <Route path="super-admin" element={<SuperAdmin />} />
                         <Route path="inscription" element={<Register />} />
                         <Route path="*" element={<NotFound />} />

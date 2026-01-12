@@ -2,8 +2,8 @@ import { Link } from "react-router";
 
 export default function NotFound() {
     return (
-        <div className="min-h-[70vh] flex items-center justify-center px-4 animate-in fade-in zoom-in duration-500">
-            <div className="max-w-2xl w-full vintage-card p-12 rounded-[50px] border-b-8 border-brice-yellow text-center relative overflow-hidden">
+        <div className="min-h-[70vh] flex items-center justify-center md:px-4 animate-in fade-in zoom-in duration-500">
+            <div className="max-w-2xl w-full vintage-card p-10 px-8 md:p-12 rounded-[50px] border-b-8 border-brice-yellow text-center relative overflow-hidden">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] font-black text-amber-900 opacity-[0.08] select-none pointer-events-none">
                     404
                 </div>
@@ -24,14 +24,13 @@ export default function NotFound() {
                     </p>
                     <p className="text-amber-700 italic mb-10 leading-relaxed">
                         Cette page n'existe pas. Tu t'es mangé le récif en plein
-                        vol. <br />
-                        T'es comme le "H" de INS'Hawaii : tu sers à rien !
+                        vol. T'es comme le "H" de INS'Hawaii : tu sers à rien !
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link
                             to="/"
-                            className="w-full sm:w-auto bg-brice-yellow text-amber-900 font-black px-10 py-4 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-lg italic uppercase tracking-widest"
+                            className="w-full sm:w-auto bg-brice-yellow text-amber-900 font-black px-6 md:px-10 py-4 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-lg italic uppercase tracking-widest"
                         >
                             Retour à la plage 🏄‍♂️
                         </Link>
