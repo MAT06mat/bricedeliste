@@ -45,7 +45,7 @@ async function request(
     if (!response.ok) {
         const errorData = await response.json();
         console.error(errorData.error || `API Error: ${response.status}`);
-        throw new Error(`API Error: ${response.status}`);
+        throw new Error(errorData.error || `API Error: ${response.status}`);
     }
 
     try {
