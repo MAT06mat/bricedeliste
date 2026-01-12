@@ -11,8 +11,7 @@ type FilterStatus = "all" | "assigned" | "unassigned";
 type SortKey = "date" | "type" | "target";
 
 export default function Admin() {
-    const { login, isLoggedIn, auth } = useAuth();
-    const [tempAuth] = useState({ email: "", pass: "" });
+    const { isLoggedIn, auth } = useAuth();
     const [orders, setOrders] = usePersistedState<sos[]>("orders", []);
     const [isLoading, setIsLoading] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -42,15 +41,14 @@ export default function Admin() {
         try {
             let data = null;
             if (isLoggedIn) data = await apiService.getOrders(auth);
-            else data = await apiService.getOrders(tempAuth);
-            if (data && typeof data === typeof []) setOrders(data);
-            if (data && !isLoggedIn) login(tempAuth);
+            if (data && typeof data.content === typeof [])
+                setOrders(data.content);
         } catch {
             showToast("C'est cassé ! Vérifie tes accès.", "error");
         } finally {
             setIsLoading(false);
         }
-    }, [isLoggedIn, auth, tempAuth, login, setOrders]);
+    }, [isLoggedIn, auth, setOrders]);
 
     useEffect(() => {
         if (isLoggedIn) fetchOrders();

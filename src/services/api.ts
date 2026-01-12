@@ -1,6 +1,7 @@
 import type { Auth } from "../context/AuthContext";
 import { API_URL, REGISTER_URL } from "../data/api";
 import type { sos } from "../types/sos";
+import type { User } from "../types/user";
 
 /**
  * Utility to get auth headers from localStorage
@@ -23,13 +24,17 @@ const getAuthHeaders = (auth: Auth | undefined = undefined) => {
  * Core fetch wrapper with cache busting
  */
 async function request(
-    options: { method: string; body?: unknown },
+    options: { method: string; action?: string; body?: unknown },
     auth: Auth | undefined = undefined
 ) {
     // Append timestamp to URL to bypass any cache
-    const urlWithCacheBuster = `${API_URL}?t=${Date.now()}`;
+    const url = new URL(API_URL);
+    url.searchParams.append("t", Date.now().toString());
+    if (options.action) {
+        url.searchParams.append("action", options.action);
+    }
 
-    const response = await fetch(urlWithCacheBuster, {
+    const response = await fetch(url, {
         method: options.method,
         headers: getAuthHeaders(auth),
         body: options.body ? JSON.stringify(options.body) : undefined,
@@ -37,15 +42,25 @@ async function request(
     });
 
     if (!response.ok) {
+        const errorData = await response.json();
+        console.error(errorData.error || `API Error: ${response.status}`);
         throw new Error(`API Error: ${response.status}`);
     }
 
-    return response.json();
+    try {
+        return await response.json();
+    } catch (err) {
+        console.error("Failed to parse JSON response:", err);
+        return null;
+    }
 }
 
 export const apiService = {
     // Get all SOS orders
-    getOrders: (auth: Auth): Promise<sos[]> => request({ method: "GET" }, auth),
+    getOrders: (
+        auth: Auth
+    ): Promise<{ super_admin: boolean; content: sos[] }> =>
+        request({ method: "GET" }, auth),
 
     // Create a new SOS
     createOrder: (data: Partial<sos>) =>
@@ -63,8 +78,11 @@ export const apiService = {
     unassignOrder: (index: number) =>
         request({ method: "POST", body: { action: "unassign", index } }),
 
+    // Toggle completion status of an SOS
     toggleComplete: (index: number) =>
         request({ method: "POST", body: { action: "toggle_complete", index } }),
+
+    // Register a new user
     register: async (email: string, pass: string, key: string) => {
         const response = await fetch(`${REGISTER_URL}?t=${Date.now()}`, {
             method: "POST",
@@ -79,9 +97,28 @@ export const apiService = {
 
         if (!response.ok) {
             const errorData = await response.json();
+            console.log(errorData.error);
             throw new Error(errorData.error || "Failed to register");
         }
 
         return response.json();
     },
+
+    // Get all users (super admin only)
+    getUsers: (): Promise<User[]> =>
+        request({ method: "GET", action: "get_users" }),
+
+    // Toggle user verification status
+    toggleVerifyUser: (email: string) =>
+        request({
+            method: "POST",
+            body: { action: "toggle_verify", email },
+        }),
+
+    // Delete a user
+    deleteUser: (email: string) =>
+        request({
+            method: "POST",
+            body: { action: "delete_user", email },
+        }),
 };

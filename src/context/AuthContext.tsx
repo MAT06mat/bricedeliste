@@ -7,8 +7,9 @@ export interface Auth {
 
 interface AuthContextType {
     auth: Auth;
+    super_admin: boolean;
     isLoggedIn: boolean;
-    login: (authData: Auth) => void;
+    login: (authData: Auth, super_admin: boolean) => void;
     logout: () => void;
 }
 

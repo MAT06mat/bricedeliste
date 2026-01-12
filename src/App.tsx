@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from "react-router";
 import { useAuth } from "./hooks/useAuth";
 
 export default function App() {
-    const { isLoggedIn, logout, auth } = useAuth();
+    const { isLoggedIn, super_admin, logout, auth } = useAuth();
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -60,6 +60,18 @@ export default function App() {
                                 >
                                     Espace SOS
                                 </Link>
+                                {super_admin && (
+                                    <Link
+                                        to="/super-admin"
+                                        className={`font-black text-sm uppercase tracking-widest transition-all ${
+                                            isActive("/super-admin")
+                                                ? "text-white underline decoration-4"
+                                                : "text-amber-900 hover:text-white"
+                                        }`}
+                                    >
+                                        Users
+                                    </Link>
+                                )}
                                 <button
                                     onClick={logout}
                                     className="bg-amber-900 text-brice-yellow px-4 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black"
@@ -148,6 +160,19 @@ export default function App() {
                             >
                                 Espace SOS
                             </Link>
+                            {super_admin && (
+                                <Link
+                                    to="/super-admin"
+                                    onClick={closeMenu}
+                                    className={`text-2xl font-black uppercase italic  ${
+                                        isActive("/super-admin")
+                                            ? "text-white scale-110"
+                                            : "text-amber-900"
+                                    }`}
+                                >
+                                    Users
+                                </Link>
+                            )}
                             <div className="pt-4 flex flex-col items-center gap-2">
                                 <span className="text-xs font-bold text-amber-700 italic">
                                     Connecté : {auth.email.split("@")[0]}

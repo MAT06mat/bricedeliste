@@ -25,7 +25,7 @@ export default function NotFound() {
                     <p className="text-amber-700 italic mb-10 leading-relaxed">
                         Cette page n'existe pas. Tu t'es mangé le récif en plein
                         vol. <br />
-                        T'es comme le "H" de INSA'Hawaii : tu sers à rien !
+                        T'es comme le "H" de INS'Hawaii : tu sers à rien !
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

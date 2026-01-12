@@ -30,7 +30,7 @@ export default function Login() {
             let data = null;
             if (isLoggedIn) data = await apiService.getOrders(auth);
             else data = await apiService.getOrders(tempAuth);
-            if (data && !isLoggedIn) login(tempAuth);
+            if (data && !isLoggedIn) login(tempAuth, data.super_admin);
             if (data) navigate("/admin");
         } catch {
             showToast("C'est cassé ! Vérifie tes accès.", "error");

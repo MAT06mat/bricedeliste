@@ -3,6 +3,7 @@ import { usePersistedState } from "../hooks/usePersistedState";
 
 // Storage keys
 const AUTH_KEY = "auth";
+const SUPER_ADMIN_KEY = "superAdmin";
 const LOGGED_IN_KEY = "isLoggedIn";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -12,13 +13,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         email: "",
         pass: "",
     });
+    const [super_admin, setSuperAdmin] = usePersistedState<boolean>(
+        SUPER_ADMIN_KEY,
+        false
+    );
     const [isLoggedIn, setIsLoggedIn] = usePersistedState<boolean>(
         LOGGED_IN_KEY,
         false
     );
 
-    const login = (authData: Auth) => {
+    const login = (authData: Auth, super_admin: boolean) => {
         setAuth(authData);
+        setSuperAdmin(super_admin);
         setIsLoggedIn(true);
     };
 
@@ -28,7 +34,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     return (
-        <AuthContext.Provider value={{ auth, isLoggedIn, login, logout }}>
+        <AuthContext.Provider
+            value={{ auth, isLoggedIn, login, logout, super_admin }}
+        >
             {children}
         </AuthContext.Provider>
     );
