@@ -44,6 +44,12 @@ export default function SuperAdmin() {
         else if (!isLoggedIn) setTimeout(() => navigate("/admin"), 0);
     }, [isLoggedIn, super_admin, fetchUsers, navigate]);
 
+    users.sort((a, b) => {
+        if (a.super_admin && !b.super_admin) return -1;
+        if (!a.super_admin && b.super_admin) return 1;
+        return a.email.localeCompare(b.email);
+    });
+
     const handleUserAction = async (
         email: string,
         action: "delete" | "toggle-verify"
