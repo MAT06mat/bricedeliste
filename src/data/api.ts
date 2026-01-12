@@ -1,2 +1,2 @@
-export const API_URL = "http://chantemuse.fr/brice-de-liste/api/";
+export const API_URL = "https://chantemuse.fr/api/brice-de-liste/";
 export const REGISTER_URL = API_URL + "register.php";
