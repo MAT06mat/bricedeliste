@@ -81,7 +81,7 @@ export default function App() {
                             </div>
                         ) : (
                             <Link
-                                to="/admin"
+                                to="/login"
                                 className="bg-amber-900 text-brice-yellow px-4 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black shadow-lg"
                             >
                                 Connexion
@@ -190,7 +190,7 @@ export default function App() {
                         </>
                     ) : (
                         <Link
-                            to="/admin"
+                            to="/login"
                             onClick={closeMenu}
                             className="bg-amber-900 text-brice-yellow px-10 py-4 rounded-2xl font-black text-lg uppercase italic shadow-xl"
                         >
