@@ -4,4 +4,5 @@ export interface StatsData {
     top_requesters: Record<string, number>;
     top_targets: Record<string, number>;
     top_completers: Record<string, number>;
+    top_types: Record<string, number>;
 }
