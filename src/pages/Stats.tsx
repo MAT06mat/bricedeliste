@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 import type { StatsData } from "../types/stats";
 import { useAuth } from "../hooks/useAuth";
 
+const defaultStats: StatsData = {
+    total: 0,
+    completed: 0,
+    top_requesters: {},
+    top_targets: {},
+    top_completers: {},
+};
+
 export default function Stats() {
     const { isLoggedIn, super_admin } = useAuth();
-    const [stats, setStats] = useState<StatsData | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [stats, setStats] = useState<StatsData>(defaultStats);
     const [toast, setToast] = useState<{
         message: string;
         type: "success" | "error";
     } | null>(null);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const data = await apiService.getStats();
             setStats(data);
@@ -22,14 +29,21 @@ export default function Stats() {
                 message: "Impossible de charger les vagues de stats.",
                 type: "error",
             });
-        } finally {
-            setIsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
-        fetchStats();
-    }, []);
+        let isMounted = true;
+        const loadData = async () => {
+            if (isMounted) {
+                await fetchStats();
+            }
+        };
+        loadData();
+        return () => {
+            isMounted = false;
+        };
+    }, [fetchStats]);
 
     const handleResetAll = async () => {
         const firstConfirm = window.confirm(
@@ -58,13 +72,6 @@ export default function Stats() {
             }
         }
     };
-
-    if (isLoading || !stats)
-        return (
-            <div className="text-center py-20 font-black italic text-amber-900 animate-pulse">
-                CHARGEMENT DES SCORES...
-            </div>
-        );
 
     return (
         <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 md:px-4">
