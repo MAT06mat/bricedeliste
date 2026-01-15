@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import SuperAdmin from "./pages/SuperAdmin";
 import Stats from "./pages/Stats";
 import { enable_full_features } from "./data/var";
+import "./data/text_console";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>

@@ -33,12 +33,25 @@ export default function OrderForm() {
         return regex.test(email);
     };
 
+    const validateRoom = (room: string) => {
+        const regex = /^[A-K]\d\d\d$/i;
+        return regex.test(room);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!validateEmail(formData.email)) {
             showToast(
                 "Format d'email invalide ! Utilise prenom.nom@insa-lyon.fr",
+                "error"
+            );
+            return;
+        }
+
+        if (!validateRoom(formData.targetRoom)) {
+            showToast(
+                "Format de chambre invalide ! Utilise un numéro comme A007.",
                 "error"
             );
             return;
@@ -175,13 +188,15 @@ export default function OrderForm() {
                         />
                         <input
                             type="text"
-                            placeholder="Chambre / Bâtiment"
+                            placeholder="Chambre (ex: A007)"
                             required
                             className="bg-white/50 border-2 border-amber-200 p-3 rounded-2xl outline-none focus:border-brice-yellow"
                             onChange={(e) =>
                                 setFormData({
                                     ...formData,
-                                    targetRoom: e.target.value,
+                                    targetRoom: e.target.value
+                                        .replace(/\s+/g, "")
+                                        .toUpperCase(), // Remove spaces and create uppercase
                                 })
                             }
                         />
