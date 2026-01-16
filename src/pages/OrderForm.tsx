@@ -188,7 +188,7 @@ export default function OrderForm() {
                         />
                         <input
                             type="text"
-                            placeholder="Chambre (ex: A007)"
+                            placeholder="Chambre, ex: A007"
                             required
                             className="bg-white/50 border-2 border-amber-200 p-3 rounded-2xl outline-none focus:border-brice-yellow"
                             onChange={(e) =>
