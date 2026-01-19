@@ -10,6 +10,8 @@ import { useNavigate } from "react-router";
 type FilterStatus = "all" | "assigned" | "unassigned";
 type SortKey = "date" | "type" | "target";
 
+const EXPIRE_LIMIT_HOURS = 1;
+
 export default function Admin() {
     const { isLoggedIn, auth } = useAuth();
     const [orders, setOrders] = usePersistedState<sos[]>("orders", []);
@@ -19,7 +21,7 @@ export default function Admin() {
 
     const [filterStatus, setFilterStatus] = usePersistedState<FilterStatus>(
         "filterStatus",
-        "all"
+        "all",
     );
     const [sortBy, setSortBy] = usePersistedState<SortKey>("sortBy", "date");
 
@@ -30,7 +32,7 @@ export default function Admin() {
 
     const showToast = (
         message: string,
-        type: "success" | "error" = "success"
+        type: "success" | "error" = "success",
     ) => {
         setToast({ message, type });
         setTimeout(() => setToast(null), 3000);
@@ -57,7 +59,7 @@ export default function Admin() {
 
     const handleAction = async (
         index: number,
-        action: "delete" | "assign" | "unassign" | "complete"
+        action: "delete" | "assign" | "unassign" | "complete",
     ) => {
         try {
             if (action === "delete") {
@@ -74,28 +76,58 @@ export default function Admin() {
     };
 
     const filteredAndSortedOrders = useMemo(() => {
-        if (typeof orders !== typeof []) return [];
+        if (!Array.isArray(orders)) return [];
+
+        const now = new Date().getTime();
+
+        const getScheduledTime = (o: sos) => {
+            if (!o.day || !o.time) return 0;
+            const hour = parseInt(o.time.replace("h", ""));
+            const d = new Date(o.day);
+            d.setHours(hour, 0, 0, 0);
+            return d.getTime();
+        };
+
+        const getStatusScore = (o: sos) => {
+            if (o.completed) return 2;
+            const scheduled = getScheduledTime(o);
+            if (now - scheduled > EXPIRE_LIMIT_HOURS * 3600000) return 1;
+            return 0;
+        };
+
         let result = [...orders].map((o, originalIndex) => ({
             ...o,
             originalIndex,
         }));
+
         if (filterStatus === "assigned")
             result = result.filter((o) => o.assigned_to && !o.completed);
         else if (filterStatus === "unassigned")
             result = result.filter((o) => !o.assigned_to && !o.completed);
 
         result.sort((a, b) => {
-            if (a.completed !== b.completed) return a.completed ? 1 : -1;
-            if (sortBy === "date")
-                return (
-                    new Date(b.created_at).getTime() -
-                    new Date(a.created_at).getTime()
-                );
-            if (sortBy === "type") return a.sosId.localeCompare(b.sosId);
-            if (sortBy === "target")
-                return a.targetName.localeCompare(b.targetName);
-            return 0;
+            const scoreA = getStatusScore(a);
+            const scoreB = getStatusScore(b);
+            if (scoreA !== scoreB) return scoreA - scoreB;
+
+            if (sortBy === "type") {
+                const typeCmp = a.sosId.localeCompare(b.sosId);
+                if (typeCmp !== 0) return typeCmp;
+            } else if (sortBy === "target") {
+                const targetCmp = a.targetName.localeCompare(b.targetName);
+                if (targetCmp !== 0) return targetCmp;
+            }
+
+            const timeA = getScheduledTime(a);
+            const timeB = getScheduledTime(b);
+            if (timeA !== timeB) return timeA - timeB;
+
+            return (
+                new Date(a.created_at).getTime() -
+                new Date(b.created_at).getTime()
+            );
         });
+
         return result;
     }, [orders, filterStatus, sortBy]);
 
@@ -138,10 +170,10 @@ export default function Admin() {
                                 {s === "all"
                                     ? "Tous"
                                     : s === "assigned"
-                                    ? "Assignés"
-                                    : "Libres"}
+                                      ? "Assignés"
+                                      : "Libres"}
                             </button>
-                        )
+                        ),
                     )}
                 </div>
                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
@@ -153,14 +185,13 @@ export default function Admin() {
                         onChange={(e) => setSortBy(e.target.value as SortKey)}
                         className="bg-white border-2 border-amber-200 rounded-lg p-1 text-[10px] md:text-xs font-bold outline-none focus:border-brice-yellow"
                     >
-                        <option value="date">Plus récents</option>
+                        <option value="date">Plus vieux</option>
                         <option value="type">Type de SOS</option>
                         <option value="target">Nom de cible</option>
                     </select>
                 </div>
             </div>
 
-            {/* Liste des SOS */}
             <div className="grid gap-3 md:gap-4">
                 {filteredAndSortedOrders.length === 0 ? (
                     <div className="text-center py-20 opacity-40 italic font-bold">
@@ -169,15 +200,35 @@ export default function Admin() {
                 ) : (
                     filteredAndSortedOrders.map((o) => {
                         const isCompleted = !!o.completed;
+
+                        const now = new Date().getTime();
+
+                        const getScheduledTime = () => {
+                            if (!o.day || !o.time) return 0;
+                            const hour = parseInt(o.time.replace("h", ""));
+                            const d = new Date(o.day);
+                            d.setHours(hour, 0, 0, 0);
+                            return d.getTime();
+                        };
+
+                        const scheduledTimestamp = getScheduledTime();
+                        const expirationTimestamp =
+                            scheduledTimestamp + EXPIRE_LIMIT_HOURS * 3600000;
+
+                        const isExpired =
+                            !isCompleted && now > expirationTimestamp;
+                        const isUrgent =
+                            !isCompleted && now > expirationTimestamp - 3600000;
+
                         return (
                             <div
                                 key={o.originalIndex}
                                 className={`vintage-card rounded-2xl transition-all duration-300 overflow-hidden ${
-                                    isCompleted
+                                    isCompleted || isExpired
                                         ? "border-dashed opacity-70"
                                         : expandedIndex === o.originalIndex
-                                        ? "ring-4 ring-brice-yellow shadow-xl"
-                                        : ""
+                                          ? "ring-4 ring-brice-yellow shadow-xl"
+                                          : ""
                                 }`}
                             >
                                 {/* Header de la carte Adaptatif */}
@@ -187,25 +238,46 @@ export default function Admin() {
                                         setExpandedIndex(
                                             expandedIndex === o.originalIndex
                                                 ? null
-                                                : o.originalIndex
+                                                : o.originalIndex,
                                         )
                                     }
                                 >
                                     <div className="flex items-center gap-3 w-full sm:w-auto">
+                                        {/* Cercle d'état : Vert (Fini), Rouge (Expiré), Jaune (En cours) */}
                                         <div
                                             className={`shrink-0 w-3 h-3 rounded-full ${
                                                 isCompleted
                                                     ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"
-                                                    : "bg-brice-yellow animate-pulse"
+                                                    : isExpired
+                                                      ? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"
+                                                      : "bg-brice-yellow animate-pulse"
                                             }`}
                                         ></div>
+
                                         <div className="flex flex-col">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[9px] font-mono text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
-                                                    {new Date(
-                                                        o.created_at
-                                                    ).toLocaleDateString()}
+                                                {/* Date et Heure prévues (Rouge si urgent/expiré) */}
+                                                <span
+                                                    className={`text-[10px] font-black px-1.5 py-0.5 rounded border ${
+                                                        isUrgent || isExpired
+                                                            ? "text-red-600 bg-red-50 border-red-200"
+                                                            : "text-amber-700 bg-amber-100 border-amber-200"
+                                                    }`}
+                                                >
+                                                    {o.day
+                                                        ? new Date(
+                                                              o.day,
+                                                          ).toLocaleDateString(
+                                                              "fr-FR",
+                                                              {
+                                                                  day: "numeric",
+                                                                  month: "short",
+                                                              },
+                                                          )
+                                                        : "??"}{" "}
+                                                    à {o.time || "??"}
                                                 </span>
+
                                                 <h3
                                                     className={`font-black text-base md:text-lg text-amber-900 uppercase italic tracking-tighter ${
                                                         isCompleted
@@ -218,16 +290,21 @@ export default function Admin() {
                                             </div>
                                             <span className="text-[9px] font-bold text-cyan-700 mt-0.5 uppercase">
                                                 {sosData.find(
-                                                    (s) => s.id == o.sosId
+                                                    (s) => s.id == o.sosId,
                                                 )?.name || o.sosId}
                                             </span>
                                         </div>
                                     </div>
+
                                     <div className="flex items-center justify-between w-content gap-3">
                                         <div className="flex gap-2">
                                             {isCompleted ? (
                                                 <span className="text-[8px] md:text-[10px] font-black text-green-700 bg-green-100 px-2 py-1 rounded uppercase">
                                                     Terminé
+                                                </span>
+                                            ) : isExpired ? (
+                                                <span className="text-[8px] md:text-[10px] font-black text-red-700 bg-red-200/70 px-2 py-1 rounded uppercase">
+                                                    EXPIRÉ
                                                 </span>
                                             ) : (
                                                 o.assigned_to && (
@@ -235,7 +312,7 @@ export default function Admin() {
                                                         🏄‍♂️{" "}
                                                         {
                                                             o.assigned_to.split(
-                                                                "@"
+                                                                "@",
                                                             )[0]
                                                         }
                                                     </span>
@@ -267,6 +344,13 @@ export default function Admin() {
                                                     Par {o.name} ({o.group}) •{" "}
                                                     {o.email}
                                                 </p>
+                                                {/* Date de création déplacée ici */}
+                                                <p className="text-[9px] opacity-50 font-bold uppercase tracking-widest">
+                                                    Commandé le :{" "}
+                                                    {new Date(
+                                                        o.created_at,
+                                                    ).toLocaleString()}
+                                                </p>
                                             </div>
                                             <div className="bg-sand/50 p-3 rounded-xl border-2 border-dashed border-amber-200">
                                                 <p className="font-black text-[9px] uppercase mb-1">
@@ -290,7 +374,7 @@ export default function Admin() {
                                                             o.assigned_to ===
                                                                 auth.email
                                                                 ? "unassign"
-                                                                : "assign"
+                                                                : "assign",
                                                         )
                                                     }
                                                     disabled={
@@ -303,23 +387,23 @@ export default function Admin() {
                                                         auth.email
                                                             ? "bg-white text-amber-900 border-2 border-amber-900"
                                                             : o.assigned_to
-                                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200 shadow-none"
-                                                            : "bg-cyan-600 text-white shadow-[0_3px_0_0_#0891b2]"
+                                                              ? "bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200 shadow-none"
+                                                              : "bg-cyan-600 text-white shadow-[0_3px_0_0_#0891b2]"
                                                     }`}
                                                 >
                                                     {o.assigned_to ===
                                                     auth.email
                                                         ? "❌ Se dé-assigner"
                                                         : o.assigned_to
-                                                        ? "Déjà pris"
-                                                        : "⚡ S'assigner"}
+                                                          ? "Déjà pris"
+                                                          : "⚡ S'assigner"}
                                                 </button>
                                             )}
                                             <button
                                                 onClick={() =>
                                                     handleAction(
                                                         o.originalIndex,
-                                                        "complete"
+                                                        "complete",
                                                     )
                                                 }
                                                 className={`w-full sm:flex-1 font-black py-3 rounded-xl brice-button text-[10px] uppercase ${
@@ -336,11 +420,11 @@ export default function Admin() {
                                                 <button
                                                     onClick={() =>
                                                         window.confirm(
-                                                            "Supprimer définitivement ?"
+                                                            "Supprimer définitivement ?",
                                                         ) &&
                                                         handleAction(
                                                             o.originalIndex,
-                                                            "delete"
+                                                            "delete",
                                                         )
                                                     }
                                                     className="w-full sm:w-auto px-6 bg-red-50 text-red-600 font-black py-3 rounded-xl brice-button text-[10px] border-2 border-red-200 uppercase"

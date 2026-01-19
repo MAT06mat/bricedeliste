@@ -9,4 +9,6 @@ export type sos = {
     assigned_to: string;
     completed: boolean;
     created_at: string;
+    day: string;
+    time: string;
 };

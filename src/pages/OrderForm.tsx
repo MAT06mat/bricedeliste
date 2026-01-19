@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import sosData from "../data/sos_list.json";
 import { Link } from "react-router";
 import { apiService } from "../services/api";
@@ -14,15 +14,41 @@ export default function OrderForm() {
         targetRoom: "",
         sosId: "",
         desc: "",
+        day: "",
+        time: "",
     });
 
     const [toast, setToast] = useState<{
         message: string;
         type: "success" | "error";
     } | null>(null);
+
+    const today = new Date();
+    const todayStr = today.toISOString().split("T")[0];
+    const currentHour = today.getHours();
+
+    useEffect(() => {
+        if (formData.day && formData.time) {
+            const hourLimit = parseInt(formData.time.replace("h", ""));
+            if (formData.day === todayStr && currentHour >= hourLimit) {
+                setTimeout(() =>
+                    setFormData((prev) => ({ ...prev, time: "" })),
+                );
+            }
+        }
+    }, [formData.day, formData.time, currentHour, todayStr]);
+
+    const isTimeDisabled = (timeLabel: string) => {
+        if (!formData.day) return false;
+        if (formData.day > todayStr) return false;
+
+        const hourLimit = parseInt(timeLabel.replace("h", ""));
+        return currentHour >= hourLimit;
+    };
+
     const showToast = (
         message: string,
-        type: "success" | "error" = "success"
+        type: "success" | "error" = "success",
     ) => {
         setToast({ message, type });
         setTimeout(() => setToast(null), 4000);
@@ -44,7 +70,7 @@ export default function OrderForm() {
         if (!validateEmail(formData.email)) {
             showToast(
                 "Format d'email invalide ! Utilise prenom.nom@insa-lyon.fr",
-                "error"
+                "error",
             );
             return;
         }
@@ -52,8 +78,13 @@ export default function OrderForm() {
         if (!validateRoom(formData.targetRoom)) {
             showToast(
                 "Format de chambre invalide ! Utilise un numéro comme A007.",
-                "error"
+                "error",
             );
+            return;
+        }
+
+        if (!formData.day || !formData.time) {
+            showToast("Choisis un jour et une heure pour la vague !", "error");
             return;
         }
 
@@ -188,7 +219,7 @@ export default function OrderForm() {
                         />
                         <input
                             type="text"
-                            placeholder="Chambre, ex: A007"
+                            placeholder="Chambre ex: A007"
                             required
                             className="bg-white/50 border-2 border-amber-200 p-3 rounded-2xl outline-none focus:border-brice-yellow"
                             onChange={(e) =>
@@ -232,6 +263,60 @@ export default function OrderForm() {
                             setFormData({ ...formData, desc: e.target.value })
                         }
                     />
+
+                    {/* --- CUSTOM DATE & TIME PICKER --- */}
+                    <div className="space-y-3 p-4 bg-amber-50/50 rounded-2xl border-2 border-dashed border-amber-200">
+                        <label className="text-xs font-bold uppercase text-amber-700 block text-center">
+                            🗓️ Quand est-ce qu'on casse ?
+                        </label>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Day Selection */}
+                            <input
+                                type="date"
+                                required
+                                min={todayStr}
+                                max="2026-12-31"
+                                className="bg-white border-2 border-amber-200 p-2 rounded-xl outline-none focus:border-brice-yellow text-amber-900 font-bold"
+                                value={formData.day}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        day: e.target.value,
+                                    })
+                                }
+                            />
+
+                            {/* Time Selection Slots */}
+                            <div className="flex justify-between gap-2">
+                                {["8h", "12h", "18h"].map((t) => {
+                                    const disabled = isTimeDisabled(t);
+                                    return (
+                                        <button
+                                            key={t}
+                                            type="button"
+                                            disabled={disabled}
+                                            onClick={() =>
+                                                setFormData({
+                                                    ...formData,
+                                                    time: t,
+                                                })
+                                            }
+                                            className={`flex-1 py-2 rounded-xl font-black transition-all border-2 ${
+                                                formData.time === t
+                                                    ? "bg-amber-900 text-brice-yellow border-amber-900"
+                                                    : disabled
+                                                      ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50"
+                                                      : "bg-white border-amber-200 text-amber-700 hover:border-brice-yellow"
+                                            }`}
+                                        >
+                                            {t}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
 
                     <button className="w-full bg-brice-yellow text-amber-900 font-black py-5 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-xl italic uppercase tracking-wider">
                         Envoyer la vague 🏄‍♂️
