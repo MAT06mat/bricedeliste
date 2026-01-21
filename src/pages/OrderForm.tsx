@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import sosData from "../data/sos_list.json";
 import { Link } from "react-router";
 import { apiService } from "../services/api";
@@ -8,8 +8,6 @@ export default function OrderForm() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
-        name: "",
-        group: "",
         targetName: "",
         targetRoom: "",
         sosId: "",
@@ -27,24 +25,29 @@ export default function OrderForm() {
     const todayStr = today.toISOString().split("T")[0];
     const currentHour = today.getHours();
 
-    useEffect(() => {
-        if (formData.day && formData.time) {
-            const hourLimit = parseInt(formData.time.replace("h", ""));
-            if (formData.day === todayStr && currentHour >= hourLimit) {
-                setTimeout(() =>
-                    setFormData((prev) => ({ ...prev, time: "" })),
-                );
-            }
-        }
-    }, [formData.day, formData.time, currentHour, todayStr]);
+    const getDayOfWeek = useCallback((dateStr: string) => {
+        if (!dateStr) return -1;
+        return new Date(dateStr).getDay();
+    }, []);
 
-    const isTimeDisabled = (timeLabel: string) => {
-        if (!formData.day) return false;
-        if (formData.day > todayStr) return false;
+    const getAvailableSlots = useCallback(
+        (dateStr: string) => {
+            const day = getDayOfWeek(dateStr);
+            if (day === 0 || day === 6) return [];
+            if (day === 5) return ["7h-8h"];
+            return ["7h-8h", "12h-14h", "18h-21h"];
+        },
+        [getDayOfWeek],
+    );
 
-        const hourLimit = parseInt(timeLabel.replace("h", ""));
-        return currentHour >= hourLimit;
-    };
+    const isSlotDisabled = useCallback(
+        (slot: string, selectedDate: string) => {
+            if (selectedDate !== todayStr) return false;
+            const slotEndHour = parseInt(slot.split("-")[1].split("h")[0]);
+            return currentHour >= slotEndHour;
+        },
+        [todayStr, currentHour],
+    );
 
     const showToast = (
         message: string,
@@ -53,6 +56,46 @@ export default function OrderForm() {
         setToast({ message, type });
         setTimeout(() => setToast(null), 4000);
     };
+
+    useEffect(() => {
+        if (formData.day) {
+            const day = getDayOfWeek(formData.day);
+
+            if (day === 0 || day === 6) {
+                setTimeout(() => {
+                    setFormData((prev) => ({ ...prev, day: "" }));
+                    showToast(
+                        "Le surf est interdit le week-end, les Brices se reposent !",
+                        "error",
+                    );
+                }, 0);
+                return;
+            }
+
+            const available = getAvailableSlots(formData.day);
+            if (formData.time && !available.includes(formData.time)) {
+                setTimeout(
+                    () => setFormData((prev) => ({ ...prev, time: "" })),
+                    0,
+                );
+            }
+
+            if (formData.time && isSlotDisabled(formData.time, formData.day)) {
+                setTimeout(
+                    () => setFormData((prev) => ({ ...prev, time: "" })),
+                    0,
+                );
+            }
+        }
+    }, [
+        formData.day,
+        formData.time,
+        todayStr,
+        currentHour,
+        getAvailableSlots,
+        isSlotDisabled,
+        getDayOfWeek,
+    ]);
 
     const validateEmail = (email: string) => {
         const regex = /^[a-z0-9._%+-]+\.[a-z0-9._%+-]+@insa-lyon\.fr$/i;
@@ -152,7 +195,7 @@ export default function OrderForm() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="space-y-1">
                         <label className="text-xs font-bold uppercase text-amber-700 ml-2">
-                            Identité du surfeur (Toi)
+                            Identité du surfeur
                         </label>
                         <input
                             type="email"
@@ -168,46 +211,13 @@ export default function OrderForm() {
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <input
-                            type="text"
-                            placeholder="Prénom"
-                            required
-                            className="bg-white/50 border-2 border-amber-200 p-3 rounded-2xl outline-none focus:border-brice-yellow"
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    name: e.target.value,
-                                })
-                            }
-                        />
-                        <input
-                            type="text"
-                            placeholder="Groupe"
-                            required
-                            className="bg-white/50 border-2 border-amber-200 p-3 rounded-2xl outline-none focus:border-brice-yellow"
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    group: e.target.value,
-                                })
-                            }
-                        />
-                    </div>
-
-                    <div className="relative py-4">
-                        <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t-2 border-dashed border-amber-200"></span>
-                        </div>
-                        <div className="relative flex justify-center text-xs uppercase font-black text-amber-400 bg-sand px-2">
-                            La Cible
-                        </div>
-                    </div>
-
                     <div className="grid grid-cols-1 gap-3">
+                        <label className="text-xs font-bold uppercase text-amber-700 ml-2">
+                            La cible
+                        </label>
                         <input
                             type="text"
-                            placeholder="Nom & Prénom de la cible"
+                            placeholder="Prénom & Nom de la cible"
                             required
                             className="bg-white/50 border-2 border-amber-200 p-3 rounded-2xl outline-none focus:border-brice-yellow"
                             onChange={(e) =>
@@ -270,50 +280,74 @@ export default function OrderForm() {
                             🗓️ Quand est-ce qu'on casse ?
                         </label>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4">
                             {/* Day Selection */}
-                            <input
-                                type="date"
-                                required
-                                min={todayStr}
-                                max="2026-12-31"
-                                className="bg-white border-2 border-amber-200 p-2 rounded-xl outline-none focus:border-brice-yellow text-amber-900 font-bold"
-                                value={formData.day}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        day: e.target.value,
-                                    })
-                                }
-                            />
+                            <div className="flex gap-1">
+                                <input
+                                    type="date"
+                                    required
+                                    min={todayStr}
+                                    max="2026-12-31"
+                                    value={formData.day}
+                                    className="w-full bg-white border-2 border-amber-200 p-2 rounded-xl outline-none focus:border-brice-yellow text-amber-900 font-bold cursor-pointer"
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            day: e.target.value,
+                                        })
+                                    }
+                                />
+                                <span className="w-max text-nowrap text-[9px] text-amber-600 italic ml-1">
+                                    * Hors week-end
+                                </span>
+                            </div>
 
                             {/* Time Selection Slots */}
-                            <div className="flex justify-between gap-2">
-                                {["8h", "12h", "18h"].map((t) => {
-                                    const disabled = isTimeDisabled(t);
-                                    return (
-                                        <button
-                                            key={t}
-                                            type="button"
-                                            disabled={disabled}
-                                            onClick={() =>
-                                                setFormData({
-                                                    ...formData,
-                                                    time: t,
-                                                })
-                                            }
-                                            className={`flex-1 py-2 rounded-xl font-black transition-all border-2 ${
-                                                formData.time === t
-                                                    ? "bg-amber-900 text-brice-yellow border-amber-900"
-                                                    : disabled
-                                                      ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50"
-                                                      : "bg-white border-amber-200 text-amber-700 hover:border-brice-yellow"
-                                            }`}
-                                        >
-                                            {t}
-                                        </button>
-                                    );
-                                })}
+                            <div className="flex flex-col gap-2">
+                                <div className="flex flex-wrap justify-between gap-2">
+                                    {formData.day ? (
+                                        getAvailableSlots(formData.day).map(
+                                            (slot) => {
+                                                const disabled = isSlotDisabled(
+                                                    slot,
+                                                    formData.day,
+                                                );
+                                                return (
+                                                    <button
+                                                        key={slot}
+                                                        type="button"
+                                                        disabled={disabled}
+                                                        onClick={() =>
+                                                            setFormData({
+                                                                ...formData,
+                                                                time: slot,
+                                                            })
+                                                        }
+                                                        className={`flex-1 min-w-[80px] py-2 rounded-xl font-black transition-all border-2 text-[10px] uppercase ${
+                                                            formData.time ===
+                                                            slot
+                                                                ? "bg-amber-900 text-brice-yellow border-amber-900"
+                                                                : disabled
+                                                                  ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50"
+                                                                  : "bg-white border-amber-200 text-amber-700 hover:border-brice-yellow"
+                                                        }`}
+                                                    >
+                                                        {slot}
+                                                    </button>
+                                                );
+                                            },
+                                        )
+                                    ) : (
+                                        <div className="w-full text-center py-2 text-[10px] text-amber-400 italic border-2 border-dashed border-amber-100 rounded-xl">
+                                            Choisis un jour d'abord
+                                        </div>
+                                    )}
+                                </div>
+                                {getDayOfWeek(formData.day) === 5 && (
+                                    <span className="text-[9px] text-cyan-600 font-bold italic ml-1">
+                                        Vendredi : Créneau unique du matin !
+                                    </span>
+                                )}
                             </div>
                         </div>
                     </div>

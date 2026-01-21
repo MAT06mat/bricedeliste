@@ -1,7 +1,5 @@
 export type sos = {
     email: string;
-    name: string;
-    group: string;
     targetName: string;
     targetRoom: string;
     sosId: string;

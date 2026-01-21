@@ -8,9 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 
 type FilterStatus = "all" | "assigned" | "unassigned";
-type SortKey = "date" | "type" | "target";
-
-const EXPIRE_LIMIT_HOURS = 1;
+type SortKey = "date" | "place" | "type" | "target";
 
 export default function Admin() {
     const { isLoggedIn, auth } = useAuth();
@@ -75,23 +73,23 @@ export default function Admin() {
         }
     };
 
+    const getScheduledTime = (o: sos, end = 0) => {
+        if (!o.day || !o.time) return 0;
+        const hour = parseInt(o.time.split("-")[end]?.split("h")[0]);
+        const d = new Date(o.day);
+        d.setHours(hour, 0, 0, 0);
+        return d.getTime();
+    };
+
     const filteredAndSortedOrders = useMemo(() => {
         if (!Array.isArray(orders)) return [];
 
         const now = new Date().getTime();
 
-        const getScheduledTime = (o: sos) => {
-            if (!o.day || !o.time) return 0;
-            const hour = parseInt(o.time.replace("h", ""));
-            const d = new Date(o.day);
-            d.setHours(hour, 0, 0, 0);
-            return d.getTime();
-        };
-
         const getStatusScore = (o: sos) => {
             if (o.completed) return 2;
-            const scheduled = getScheduledTime(o);
-            if (now - scheduled > EXPIRE_LIMIT_HOURS * 3600000) return 1;
+            const scheduled = getScheduledTime(o, 1);
+            if (now > scheduled) return 1;
             return 0;
         };
 
@@ -116,6 +114,9 @@ export default function Admin() {
             } else if (sortBy === "target") {
                 const targetCmp = a.targetName.localeCompare(b.targetName);
                 if (targetCmp !== 0) return targetCmp;
+            } else if (sortBy === "place") {
+                const placeCmp = a.targetRoom[0].localeCompare(b.targetRoom[0]);
+                if (placeCmp !== 0) return placeCmp;
             }
 
             const timeA = getScheduledTime(a);
@@ -185,7 +186,8 @@ export default function Admin() {
                         onChange={(e) => setSortBy(e.target.value as SortKey)}
                         className="bg-white border-2 border-amber-200 rounded-lg p-1 text-[10px] md:text-xs font-bold outline-none focus:border-brice-yellow"
                     >
-                        <option value="date">Plus vieux</option>
+                        <option value="date">Défaut</option>
+                        <option value="place">Bâtiment</option>
                         <option value="type">Type de SOS</option>
                         <option value="target">Nom de cible</option>
                     </select>
@@ -203,22 +205,13 @@ export default function Admin() {
 
                         const now = new Date().getTime();
 
-                        const getScheduledTime = () => {
-                            if (!o.day || !o.time) return 0;
-                            const hour = parseInt(o.time.replace("h", ""));
-                            const d = new Date(o.day);
-                            d.setHours(hour, 0, 0, 0);
-                            return d.getTime();
-                        };
-
-                        const scheduledTimestamp = getScheduledTime();
-                        const expirationTimestamp =
-                            scheduledTimestamp + EXPIRE_LIMIT_HOURS * 3600000;
+                        const scheduledTimestamp = getScheduledTime(o);
+                        const expirationTimestamp = getScheduledTime(o, 1);
 
                         const isExpired =
                             !isCompleted && now > expirationTimestamp;
                         const isUrgent =
-                            !isCompleted && now > expirationTimestamp - 3600000;
+                            !isCompleted && now > scheduledTimestamp;
 
                         return (
                             <div
@@ -278,6 +271,10 @@ export default function Admin() {
                                                     à {o.time || "??"}
                                                 </span>
 
+                                                <span className="text-[12px] font-black pr-1 py-0.5 text-amber-700">
+                                                    Bât. {o.targetRoom[0]}
+                                                </span>
+
                                                 <h3
                                                     className={`font-black text-base md:text-lg text-amber-900 uppercase italic tracking-tighter ${
                                                         isCompleted
@@ -304,7 +301,7 @@ export default function Admin() {
                                                 </span>
                                             ) : isExpired ? (
                                                 <span className="text-[8px] md:text-[10px] font-black text-red-700 bg-red-200/70 px-2 py-1 rounded uppercase">
-                                                    EXPIRÉ
+                                                    Expiré
                                                 </span>
                                             ) : (
                                                 o.assigned_to && (
@@ -341,15 +338,19 @@ export default function Admin() {
                                                     </span>
                                                 </p>
                                                 <p className="text-[10px] opacity-70 italic font-medium">
-                                                    Par {o.name} ({o.group}) •{" "}
-                                                    {o.email}
+                                                    Par {o.email}
                                                 </p>
                                                 {/* Date de création déplacée ici */}
-                                                <p className="text-[9px] opacity-50 font-bold uppercase tracking-widest">
+                                                <p className="text-[10px] opacity-70 italic font-medium">
                                                     Commandé le :{" "}
                                                     {new Date(
                                                         o.created_at,
-                                                    ).toLocaleString()}
+                                                    ).toLocaleString("fr-FR", {
+                                                        day: "numeric",
+                                                        month: "short",
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                    })}
                                                 </p>
                                             </div>
                                             <div className="bg-sand/50 p-3 rounded-xl border-2 border-dashed border-amber-200">
