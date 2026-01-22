@@ -264,6 +264,16 @@ export default function OrderForm() {
                                 </option>
                             ))}
                         </select>
+                        {sosData.find((sos) => sos.id === formData.sosId)
+                            ?.textOnSelect && (
+                            <div className="p-3 bg-amber-100 border-l-4 border-amber-400 text-amber-800 italic text-sm rounded-xl mt-2 mb-5">
+                                {
+                                    sosData.find(
+                                        (sos) => sos.id === formData.sosId,
+                                    )?.textOnSelect
+                                }
+                            </div>
+                        )}
                     </div>
 
                     <textarea
@@ -275,80 +285,72 @@ export default function OrderForm() {
                     />
 
                     {/* --- CUSTOM DATE & TIME PICKER --- */}
-                    <div className="space-y-3 p-4 bg-amber-50/50 rounded-2xl border-2 border-dashed border-amber-200">
-                        <label className="text-xs font-bold uppercase text-amber-700 block text-center">
-                            🗓️ Quand est-ce qu'on casse ?
-                        </label>
+                    <label className="text-xs font-bold uppercase text-amber-700 ml-2">
+                        Quand est-ce qu'on casse ?
+                        <span className="w-max text-nowrap text-[9px] text-amber-600 italic ml-2">
+                            * Hors week-end
+                        </span>
+                    </label>
 
-                        <div className="grid grid-cols-1 gap-4">
-                            {/* Day Selection */}
-                            <div className="flex gap-1">
-                                <input
-                                    type="date"
-                                    required
-                                    min={todayStr}
-                                    max="2026-12-31"
-                                    value={formData.day}
-                                    className="w-full bg-white border-2 border-amber-200 p-2 rounded-xl outline-none focus:border-brice-yellow text-amber-900 font-bold cursor-pointer"
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            day: e.target.value,
-                                        })
-                                    }
-                                />
-                                <span className="w-max text-nowrap text-[9px] text-amber-600 italic ml-1">
-                                    * Hors week-end
-                                </span>
-                            </div>
+                    <div className="grid grid-cols-1 gap-4">
+                        {/* Day Selection */}
+                        <div className="flex gap-1">
+                            <input
+                                type="date"
+                                required
+                                min={todayStr}
+                                max="2026-12-31"
+                                value={formData.day}
+                                className="w-full bg-white border-2 border-amber-200 p-2 rounded-xl outline-none focus:border-brice-yellow text-amber-900 font-bold cursor-pointer"
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        day: e.target.value,
+                                    })
+                                }
+                            />
+                        </div>
 
-                            {/* Time Selection Slots */}
-                            <div className="flex flex-col gap-2">
-                                <div className="flex flex-wrap justify-between gap-2">
-                                    {formData.day ? (
-                                        getAvailableSlots(formData.day).map(
-                                            (slot) => {
-                                                const disabled = isSlotDisabled(
-                                                    slot,
-                                                    formData.day,
-                                                );
-                                                return (
-                                                    <button
-                                                        key={slot}
-                                                        type="button"
-                                                        disabled={disabled}
-                                                        onClick={() =>
-                                                            setFormData({
-                                                                ...formData,
-                                                                time: slot,
-                                                            })
-                                                        }
-                                                        className={`flex-1 min-w-[80px] py-2 rounded-xl font-black transition-all border-2 text-[10px] uppercase ${
-                                                            formData.time ===
-                                                            slot
-                                                                ? "bg-amber-900 text-brice-yellow border-amber-900"
-                                                                : disabled
-                                                                  ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50"
-                                                                  : "bg-white border-amber-200 text-amber-700 hover:border-brice-yellow"
-                                                        }`}
-                                                    >
-                                                        {slot}
-                                                    </button>
-                                                );
-                                            },
-                                        )
-                                    ) : (
-                                        <div className="w-full text-center py-2 text-[10px] text-amber-400 italic border-2 border-dashed border-amber-100 rounded-xl">
-                                            Choisis un jour d'abord
-                                        </div>
+                        {/* Time Selection Slots */}
+                        <div className="flex flex-col gap-2">
+                            <div className="flex flex-wrap justify-between gap-2">
+                                {formData.day &&
+                                    getAvailableSlots(formData.day).map(
+                                        (slot) => {
+                                            const disabled = isSlotDisabled(
+                                                slot,
+                                                formData.day,
+                                            );
+                                            return (
+                                                <button
+                                                    key={slot}
+                                                    type="button"
+                                                    disabled={disabled}
+                                                    onClick={() =>
+                                                        setFormData({
+                                                            ...formData,
+                                                            time: slot,
+                                                        })
+                                                    }
+                                                    className={`flex-1 min-w-[80px] py-2 rounded-xl font-black transition-all border-2 text-[10px] uppercase ${
+                                                        formData.time === slot
+                                                            ? "bg-amber-900 text-brice-yellow border-amber-900"
+                                                            : disabled
+                                                              ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-50"
+                                                              : "bg-white border-amber-200 text-amber-700 hover:border-brice-yellow"
+                                                    }`}
+                                                >
+                                                    {slot}
+                                                </button>
+                                            );
+                                        },
                                     )}
-                                </div>
-                                {getDayOfWeek(formData.day) === 5 && (
-                                    <span className="text-[9px] text-cyan-600 font-bold italic ml-1">
-                                        Vendredi : Créneau unique du matin !
-                                    </span>
-                                )}
                             </div>
+                            {getDayOfWeek(formData.day) === 5 && (
+                                <span className="text-[9px] text-cyan-600 font-bold italic ml-1">
+                                    Vendredi : Créneau unique du matin !
+                                </span>
+                            )}
                         </div>
                     </div>
 
