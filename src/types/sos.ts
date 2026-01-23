@@ -1,7 +1,5 @@
 export type sos = {
     email: string;
-    name: string;
-    group: string;
     targetName: string;
     targetRoom: string;
     sosId: string;
@@ -9,4 +7,6 @@ export type sos = {
     assigned_to: string;
     completed: boolean;
     created_at: string;
+    day: string;
+    time: string;
 };

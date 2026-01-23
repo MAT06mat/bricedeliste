@@ -3,6 +3,7 @@ import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 import type { StatsData } from "../types/stats";
 import { useAuth } from "../hooks/useAuth";
+import sosData from "../data/sos_list.json";
 
 const defaultStats: StatsData = {
     total: 0,
@@ -10,6 +11,7 @@ const defaultStats: StatsData = {
     top_requesters: {},
     top_targets: {},
     top_completers: {},
+    top_types: {},
 };
 
 export default function Stats() {
@@ -101,7 +103,7 @@ export default function Stats() {
             </div>
 
             {/* Top 10 Lists */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
                 <TopList
                     title="Top Demandeurs"
                     data={stats.top_requesters}
@@ -119,6 +121,12 @@ export default function Stats() {
                     data={stats.top_completers}
                     sub="Les pros du surf"
                     emoji="👑"
+                />
+                <TopList
+                    title="Top SOS"
+                    data={stats.top_types}
+                    sub="Les plus grandes vagues"
+                    emoji="🌊"
                 />
             </div>
             {super_admin && isLoggedIn && (
@@ -205,6 +213,9 @@ function TopList({
     sub: string;
     emoji: string;
 }) {
+    if (!data) {
+        data = {};
+    }
     const entries = Object.entries(data);
 
     return (
@@ -242,8 +253,12 @@ function TopList({
                                 </span>
                                 <span className="text-xs font-bold text-amber-900 truncate uppercase tracking-tighter">
                                     {name.includes("@")
-                                        ? name.split("@")[0]
-                                        : name}
+                                        ? name
+                                              .split("@")[0]
+                                              .split(".")
+                                              .join(" ")
+                                        : sosData.find((sos) => sos.id === name)
+                                              ?.name || name}
                                 </span>
                             </div>
                             <span className="text-xs font-black text-brice-yellow bg-amber-900 px-2 py-1 rounded-lg group-hover:scale-110 transition-transform">
