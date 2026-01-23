@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { useAuth } from "./hooks/useAuth";
+import Footer from "./components/Footer";
 
 export default function App() {
     const { isLoggedIn, super_admin, logout, auth } = useAuth();
@@ -219,9 +220,10 @@ export default function App() {
                 </div>
             </nav>
 
-            <main className="container mx-auto p-4 md:p-8 pt-24 md:pt-32 z-20">
+            <main className="container mx-auto p-4 md:p-8 pt-24 md:pt-32 pb-12 md:pb-12 z-20">
                 <Outlet />
             </main>
+            <Footer />
         </div>
     );
 }
