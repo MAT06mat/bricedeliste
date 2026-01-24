@@ -2,8 +2,8 @@ import Logo from "./../assets/logo.jpeg";
 
 export default function Footer() {
     return (
-        <footer className="w-full mt-auto bg-brice-yellow border-t-8 border-yellow-600 relative">
-            <div className="max-w-5xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-8">
+        <footer className="w-full mt-auto bg-brice-yellow border-t-8 border-yellow-600 relative px-4">
+            <div className="max-w-5xl mx-auto py-4 flex items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
                     <div className="w-20 h-20">
                         <img
@@ -16,7 +16,7 @@ export default function Footer() {
                         <span className="font-black italic text-2xl text-amber-900 leading-none">
                             BRICE
                         </span>
-                        <span className="text-white text-stroke-sm font-black text-sm tracking-widest">
+                        <span className="text-white text-stroke-sm font-black text-sm tracking-widest w-max">
                             CDP 2026
                         </span>
                     </div>
@@ -24,7 +24,11 @@ export default function Footer() {
 
                 <div className="text-center md:text-right space-y-2">
                     <p className="font-bold text-amber-800 text-xs uppercase tracking-tighter">
-                        Développé avec ❤️ et beaucoup de Jaune
+                        Développé avec ❤️{" "}
+                        <span className="hidden md:inline">
+                            et beaucoup de Jaune
+                        </span>
+                        <span className="md:hidden">par</span>
                     </p>
                     <a
                         href="https://github.com/MAT06mat"
