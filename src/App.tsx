@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { useAuth } from "./hooks/useAuth";
 import { enable_full_features } from "./data/var";
 import Footer from "./components/Footer";
+import { useEffect } from "react";
 
 export default function App() {
     const { isLoggedIn, super_admin, logout, auth } = useAuth();
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const pageRef = useRef<HTMLDivElement>(null);
 
     const isActive = (path: string) => location.pathname === path;
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
 
+    useEffect(() => {
+        pageRef.current?.scrollTo(0, 0);
+    }, [location.pathname]);
+
     return (
-        <div className="h-[100svh] flex flex-col items-center page-background">
+        <div
+            ref={pageRef}
+            className="h-[100svh] flex flex-col items-center page-background"
+        >
             <nav className="fixed top-0 w-full z-50 bg-brice-yellow border-b-4 border-yellow-600 shadow-xl px-4 py-3">
                 <div className="max-w-5xl mx-auto flex justify-between items-center">
                     <Link

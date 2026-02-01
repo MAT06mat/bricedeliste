@@ -5,7 +5,7 @@ import { Link } from "react-router";
 export default function SosList() {
     const sosDataExtend = [...sosData, ...sosData, ...sosData, ...sosData];
     return (
-        <div className="max-w-6xl mx-auto px-4 pb-20 animate-in fade-in duration-700">
+        <div className="max-w-6xl mx-auto px-4 animate-in fade-in duration-700">
             {/* Header de la page */}
             <div className="text-center mb-16 relative">
                 <h1 className="text-5xl md:text-7xl font-black italic text-amber-900 uppercase tracking-tighter drop-shadow-sm">
