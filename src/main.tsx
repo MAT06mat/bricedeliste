@@ -8,11 +8,12 @@ import OrderForm from "./pages/OrderForm";
 import Admin from "./pages/Admin";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
-import "./index.css";
 import Login from "./pages/Login";
 import SuperAdmin from "./pages/SuperAdmin";
 import Stats from "./pages/Stats";
+import SosList from "./pages/SosList";
 import { enable_full_features } from "./data/var";
+import "./index.css";
 import "./data/text_console";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Routes>
                     <Route path="/" element={<App />}>
                         <Route index element={<Home />} />
+                        <Route path="sos" element={<SosList />} />
                         <Route path="commander" element={<OrderForm />} />
                         <Route path="login" element={<Login />} />
                         <Route path="admin" element={<Admin />} />
@@ -35,5 +37,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
 );

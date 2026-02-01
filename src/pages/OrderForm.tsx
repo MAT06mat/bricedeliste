@@ -5,6 +5,9 @@ import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 
 export default function OrderForm() {
+    const params = new URLSearchParams(window.location.search);
+    const defaultSosId = params.get("id");
+
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
@@ -256,6 +259,7 @@ export default function OrderForm() {
                                     sosId: e.target.value,
                                 })
                             }
+                            defaultValue={defaultSosId ?? ""}
                         >
                             <option value="">-- Choisis ton SOS --</option>
                             {sosData.map((sos) => (

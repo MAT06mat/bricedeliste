@@ -14,5 +14,15 @@
         "id": "yellow_card",
         "name": "Le Casse de Brice",
         "description": "On vient voir la personne et on lui met un vent mémorable devant tout le monde."
+    },
+    {
+        "id": "confetti",
+        "name": "Le Lancer de Confettis",
+        "description": "On lance une pluie de confettis sur la personne ciblée."
+    },
+    {
+        "id": "random",
+        "name": "Le SOS random",
+        "description": "Choisi un SOS au hasard."
     }
 ]

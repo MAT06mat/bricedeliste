@@ -28,7 +28,7 @@ export default function App() {
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex space-x-8 items-center">
+                    <div className="hidden lg:flex space-x-8 items-center">
                         <Link
                             to="/"
                             className={`font-black text-sm uppercase tracking-widest transition-all ${
@@ -38,6 +38,16 @@ export default function App() {
                             }`}
                         >
                             Accueil
+                        </Link>
+                        <Link
+                            to="/sos"
+                            className={`font-black text-sm uppercase tracking-widest transition-all ${
+                                isActive("/sos")
+                                    ? "text-white underline decoration-4"
+                                    : "text-amber-900 hover:text-white"
+                            }`}
+                        >
+                            Nos SOS
                         </Link>
                         <Link
                             to="/commander"
@@ -105,7 +115,7 @@ export default function App() {
                     {/* Burger Button (Mobile Only) */}
                     <button
                         onClick={toggleMenu}
-                        className="md:hidden z-50 p-2 text-amber-900 focus:outline-none"
+                        className="lg:hidden z-50 p-2 text-amber-900 focus:outline-none"
                     >
                         <div className="space-y-1.5">
                             <span
@@ -133,7 +143,7 @@ export default function App() {
 
                 {/* Mobile Menu Overlay */}
                 <div
-                    className={`fixed inset-0 bg-brice-yellow transition-transform duration-500 ease-in-out md:hidden flex flex-col items-center justify-center space-y-8 ${
+                    className={`fixed inset-0 bg-brice-yellow transition-transform duration-500 ease-in-out lg:hidden flex flex-col items-center justify-center space-y-8 ${
                         isMenuOpen ? "translate-y-0" : "-translate-y-full"
                     }`}
                 >
@@ -147,6 +157,17 @@ export default function App() {
                         }`}
                     >
                         Accueil
+                    </Link>
+                    <Link
+                        to="/sos"
+                        onClick={closeMenu}
+                        className={`text-2xl font-black uppercase italic ${
+                            isActive("/sos")
+                                ? "text-white scale-110"
+                                : "text-amber-900"
+                        }`}
+                    >
+                        Nos SOS
                     </Link>
                     <Link
                         to="/commander"
