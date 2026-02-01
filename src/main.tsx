@@ -12,9 +12,10 @@ import Login from "./pages/Login";
 import SuperAdmin from "./pages/SuperAdmin";
 import Stats from "./pages/Stats";
 import SosList from "./pages/SosList";
-import { enable_full_features } from "./data/var";
+import { bloc_sos_command, enable_full_features } from "./data/var";
 import "./index.css";
 import "./data/text_console";
+import Unavailable from "./pages/Unavailable";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -23,8 +24,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Routes>
                     <Route path="/" element={<App />}>
                         <Route index element={<Home />} />
-                        <Route path="sos" element={<SosList />} />
-                        <Route path="commander" element={<OrderForm />} />
+                        <Route
+                            path="sos"
+                            element={
+                                bloc_sos_command ? <Unavailable /> : <SosList />
+                            }
+                        />
+                        <Route
+                            path="commander"
+                            element={
+                                bloc_sos_command ? (
+                                    <Unavailable />
+                                ) : (
+                                    <OrderForm />
+                                )
+                            }
+                        />
                         <Route path="login" element={<Login />} />
                         <Route path="admin" element={<Admin />} />
                         {enable_full_features && (
