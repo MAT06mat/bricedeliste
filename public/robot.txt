@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bricedeliste.com/sitemap.xml
+Sitemap: https://www.bricedeliste.com/sitemap.xml
