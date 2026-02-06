@@ -13,9 +13,9 @@ import SuperAdmin from "./pages/SuperAdmin";
 import Stats from "./pages/Stats";
 import SosList from "./pages/SosList";
 import { bloc_sos_command, enable_full_features } from "./data/var";
+import Unavailable from "./pages/Unavailable";
 import "./index.css";
 import "./data/text_console";
-import Unavailable from "./pages/Unavailable";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>

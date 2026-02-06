@@ -7,6 +7,7 @@ import Toast from "../components/Toast";
 
 export default function OrderForm() {
     const params = new URLSearchParams(window.location.search);
+    const isLocal = window.location.hostname.includes("localhost");
     const defaultSosId = params.get("id");
 
     const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -117,7 +118,7 @@ export default function OrderForm() {
         e.preventDefault();
 
         const captchaToken = recaptchaRef.current?.getValue();
-        if (!captchaToken) {
+        if (!captchaToken && !isLocal) {
             showToast(
                 "Prouve que tu n'es pas un robot avant de surfer !",
                 "error",
@@ -370,13 +371,15 @@ export default function OrderForm() {
                         </div>
                     </div>
 
-                    <div className="flex justify-center py-2">
-                        <ReCAPTCHA
-                            ref={recaptchaRef}
-                            sitekey="6Leef2IsAAAAAIj7_OWoeY23bgFJGHecv8ZtBaRd"
-                            hl="fr"
-                        />
-                    </div>
+                    {!isLocal && (
+                        <div className="flex justify-center py-2">
+                            <ReCAPTCHA
+                                ref={recaptchaRef}
+                                sitekey="6Leef2IsAAAAAIj7_OWoeY23bgFJGHecv8ZtBaRd"
+                                hl="fr"
+                            />
+                        </div>
+                    )}
 
                     <button className="w-full bg-brice-yellow text-amber-900 font-black py-5 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-xl italic uppercase tracking-wider">
                         Envoyer la vague 🏄‍♂️
