@@ -4,6 +4,7 @@ import sosData from "../data/sos_list.json";
 import { Link } from "react-router";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
+import { usePersistedState } from "../hooks/usePersistedState";
 
 export default function OrderForm() {
     const params = new URLSearchParams(window.location.search);
@@ -12,7 +13,22 @@ export default function OrderForm() {
 
     const recaptchaRef = useRef<ReCAPTCHA>(null);
 
+    const today = new Date();
+    const todayStr = today.toISOString().split("T")[0];
+    const currentHour = today.getHours();
+
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [todaySubmit, setTodaySubmit] = usePersistedState(
+        "todaySubmit",
+        todayStr + ":::0",
+    );
+
+    if (todaySubmit.split(":::")[0] !== todayStr) {
+        setTodaySubmit(todayStr + ":::0");
+    }
+
+    const numberOfSubmissionsToday = parseInt(todaySubmit.split(":::")[1]) || 0;
+
     const [formData, setFormData] = useState({
         email: "",
         targetName: "",
@@ -27,10 +43,6 @@ export default function OrderForm() {
         message: string;
         type: "success" | "error";
     } | null>(null);
-
-    const today = new Date();
-    const todayStr = today.toISOString().split("T")[0];
-    const currentHour = today.getHours();
 
     const getDayOfWeek = useCallback((dateStr: string) => {
         if (!dateStr) return -1;
@@ -147,8 +159,17 @@ export default function OrderForm() {
             return;
         }
 
+        if (numberOfSubmissionsToday >= 2) {
+            showToast(
+                "Tu as déjà envoyé 2 SOS aujourd'hui ! Reviens demain pour surfer à nouveau.",
+                "error",
+            );
+            return;
+        }
+
         try {
             await apiService.createOrder(formData);
+            setTodaySubmit(todayStr + ":::" + (numberOfSubmissionsToday + 1));
             setIsSubmitted(true);
         } catch (err: unknown) {
             let errorMessage = "Le surf a échoué, réessaie !";

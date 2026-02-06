@@ -26,7 +26,7 @@ const getAuthHeaders = (auth: Auth | undefined = undefined) => {
  */
 async function request(
     options: { method: string; action?: string; body?: unknown },
-    auth: Auth | undefined = undefined
+    auth: Auth | undefined = undefined,
 ) {
     // Append timestamp to URL to bypass any cache
     const url = new URL(API_URL);
@@ -52,6 +52,7 @@ async function request(
         return await response.json();
     } catch (err) {
         console.error("Failed to parse JSON response:", err);
+        console.log("Raw response:", await response.text());
         return null;
     }
 }
@@ -59,7 +60,7 @@ async function request(
 export const apiService = {
     // Get all SOS orders
     getOrders: (
-        auth: Auth
+        auth: Auth,
     ): Promise<{ super_admin: boolean; content: sos[] }> =>
         request({ method: "GET" }, auth),
 
