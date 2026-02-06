@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import sosData from "../data/sos_list.json";
 import { Link } from "react-router";
 import { apiService } from "../services/api";
@@ -7,6 +8,8 @@ import Toast from "../components/Toast";
 export default function OrderForm() {
     const params = new URLSearchParams(window.location.search);
     const defaultSosId = params.get("id");
+
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formData, setFormData] = useState({
@@ -112,6 +115,15 @@ export default function OrderForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const captchaToken = recaptchaRef.current?.getValue();
+        if (!captchaToken) {
+            showToast(
+                "Prouve que tu n'es pas un robot avant de surfer !",
+                "error",
+            );
+            return;
+        }
 
         if (!validateEmail(formData.email)) {
             showToast(
@@ -356,6 +368,14 @@ export default function OrderForm() {
                                 </span>
                             )}
                         </div>
+                    </div>
+
+                    <div className="flex justify-center py-2">
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            sitekey="6Leef2IsAAAAAIj7_OWoeY23bgFJGHecv8ZtBaRd"
+                            hl="fr"
+                        />
                     </div>
 
                     <button className="w-full bg-brice-yellow text-amber-900 font-black py-5 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-xl italic uppercase tracking-wider">
