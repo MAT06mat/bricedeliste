@@ -135,7 +135,7 @@ export default function Admin() {
     if (!isLoggedIn) return null;
 
     return (
-        <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 md:px-4 pb-8">
+        <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 md:px-4">
             {/* Titre et Refresh (Mobile Friendly) */}
             <div className="flex flex-col md:flex-row justify-between items-center bg-brice-yellow p-4 md:p-5 rounded-2xl shadow-md border-b-4 border-yellow-600 gap-3">
                 <div className="text-center md:text-left">
@@ -274,16 +274,6 @@ export default function Admin() {
                                                 <span className="text-[12px] font-black pr-1 py-0.5 text-amber-700">
                                                     Bât. {o.targetRoom[0]}
                                                 </span>
-
-                                                <h3
-                                                    className={`font-black text-base md:text-lg text-amber-900 uppercase italic tracking-tighter ${
-                                                        isCompleted
-                                                            ? "line-through opacity-50"
-                                                            : ""
-                                                    }`}
-                                                >
-                                                    {o.targetName}
-                                                </h3>
                                             </div>
                                             <span className="text-[9px] font-bold text-cyan-700 mt-0.5 uppercase">
                                                 {sosData.find(
@@ -329,20 +319,34 @@ export default function Admin() {
                                     <div className="p-4 md:p-6 border-t-2 border-amber-900/5 bg-white/40 space-y-4 animate-in fade-in slide-in-from-top-2">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
                                             <div className="space-y-2 text-amber-900">
+                                                <div
+                                                    className={`font-black text-base text-amber-900 uppercase italic tracking-tighter ${
+                                                        isCompleted
+                                                            ? "line-through opacity-50"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    {o.targetName}
+                                                </div>
                                                 <p>
                                                     <strong>
-                                                        📍 Localisation:
+                                                        Localisation :
                                                     </strong>{" "}
                                                     <span className="bg-white/50 px-2 rounded">
                                                         {o.targetRoom}
                                                     </span>
                                                 </p>
-                                                <p className="text-[10px] opacity-70 italic font-medium">
-                                                    Par {o.email}
+                                                <p>
+                                                    <strong>
+                                                        Commanditaire :
+                                                    </strong>{" "}
+                                                    <span className="bg-white/50 px-2 rounded">
+                                                        {o.email}
+                                                    </span>
                                                 </p>
                                                 {/* Date de création déplacée ici */}
                                                 <p className="text-[10px] opacity-70 italic font-medium">
-                                                    Commandé le :{" "}
+                                                    Commandé le{" "}
                                                     {new Date(
                                                         o.created_at,
                                                     ).toLocaleString("fr-FR", {

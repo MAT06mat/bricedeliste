@@ -198,7 +198,7 @@ export default function OrderForm() {
         <>
             <div
                 key="2"
-                className="max-w-xl mx-auto vintage-card p-4 pt-8 pb-6 md:p-8 rounded-3xl animate-in slide-in-from-bottom-8 duration-500"
+                className="max-w-xl mx-auto vintage-card p-4 md:p-8 rounded-3xl animate-in slide-in-from-bottom-8 duration-500"
             >
                 <div className="text-center mb-8">
                     <h2 className="text-4xl font-black text-amber-900 italic uppercase">

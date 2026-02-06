@@ -19,7 +19,7 @@ export default function SuperAdmin() {
 
     const showToast = (
         message: string,
-        type: "success" | "error" = "success"
+        type: "success" | "error" = "success",
     ) => {
         setToast({ message, type });
         setTimeout(() => setToast(null), 3000);
@@ -52,13 +52,13 @@ export default function SuperAdmin() {
 
     const handleUserAction = async (
         email: string,
-        action: "delete" | "toggle-verify"
+        action: "delete" | "toggle-verify",
     ) => {
         try {
             if (action === "delete") {
                 if (
                     window.confirm(
-                        `Supprimer l'utilisateur ${email} ? Cette action est définitive.`
+                        `Supprimer l'utilisateur ${email} ? Cette action est définitive.`,
                     )
                 ) {
                     await apiService.deleteUser(email);
@@ -78,7 +78,7 @@ export default function SuperAdmin() {
     if (!isLoggedIn || !super_admin) return null;
 
     return (
-        <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 px-2 md:px-4 pb-10">
+        <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 px-2 md:px-4">
             {/* Header SuperAdmin */}
             <div className="flex flex-col md:flex-row justify-between items-center bg-amber-900 p-5 rounded-2xl shadow-xl border-b-4 border-black gap-4">
                 <div className="text-center md:text-left">
@@ -136,7 +136,7 @@ export default function SuperAdmin() {
                                     onClick={() =>
                                         handleUserAction(
                                             user.email,
-                                            "toggle-verify"
+                                            "toggle-verify",
                                         )
                                     }
                                     disabled={user.super_admin} // On ne dé-vérifie pas un super_admin ici
@@ -161,7 +161,7 @@ export default function SuperAdmin() {
                                         onClick={() =>
                                             handleUserAction(
                                                 user.email,
-                                                "delete"
+                                                "delete",
                                             )
                                         }
                                         className="p-2 bg-red-50 text-red-600 rounded-xl border-2 border-red-100 hover:bg-red-600 hover:text-white transition-all shadow-[0_3px_0_0_rgba(220,38,38,0.2)]"
