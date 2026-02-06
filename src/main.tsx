@@ -20,7 +20,7 @@ import "./data/text_console";
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <AuthProvider>
-            <BrowserRouter basename="/bricedeliste">
+            <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<App />}>
                         <Route index element={<Home />} />
