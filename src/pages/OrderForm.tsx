@@ -122,7 +122,7 @@ export default function OrderForm() {
     };
 
     const validateRoom = (room: string) => {
-        const regex = /^[A-K]\d\d\d$/i;
+        const regex = /^[A-J]|M\d\d\d$/i;
         return regex.test(room);
     };
 
