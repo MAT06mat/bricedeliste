@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { useAuth } from "./hooks/useAuth";
-import { enable_full_features } from "./data/var";
 import Footer from "./components/Footer";
 import { useEffect } from "react";
 
@@ -68,18 +67,16 @@ export default function App() {
                         >
                             Commander
                         </Link>
-                        {enable_full_features && (
-                            <Link
-                                to="/stats"
-                                className={`font-black text-sm uppercase tracking-widest transition-all ${
-                                    isActive("/stats")
-                                        ? "text-white underline decoration-4"
-                                        : "text-amber-900 hover:text-white"
-                                }`}
-                            >
-                                Stats
-                            </Link>
-                        )}
+                        <Link
+                            to="/stats"
+                            className={`font-black text-sm uppercase tracking-widest transition-all ${
+                                isActive("/stats")
+                                    ? "text-white underline decoration-4"
+                                    : "text-amber-900 hover:text-white"
+                            }`}
+                        >
+                            Stats
+                        </Link>
                         {isLoggedIn ? (
                             <div className="flex items-center gap-6">
                                 <Link
@@ -189,19 +186,17 @@ export default function App() {
                     >
                         Commander
                     </Link>
-                    {enable_full_features && (
-                        <Link
-                            to="/stats"
-                            onClick={closeMenu}
-                            className={`text-2xl font-black uppercase italic ${
-                                isActive("/stats")
-                                    ? "text-white scale-110"
-                                    : "text-amber-900"
-                            }`}
-                        >
-                            Stats
-                        </Link>
-                    )}
+                    <Link
+                        to="/stats"
+                        onClick={closeMenu}
+                        className={`text-2xl font-black uppercase italic ${
+                            isActive("/stats")
+                                ? "text-white scale-110"
+                                : "text-amber-900"
+                        }`}
+                    >
+                        Stats
+                    </Link>
                     {isLoggedIn ? (
                         <>
                             <Link

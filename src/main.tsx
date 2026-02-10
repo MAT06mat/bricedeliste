@@ -42,9 +42,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         />
                         <Route path="login" element={<Login />} />
                         <Route path="admin" element={<Admin />} />
-                        {enable_full_features && (
-                            <Route path="stats" element={<Stats />} />
-                        )}
+                        <Route
+                            path="stats"
+                            element={
+                                enable_full_features ? (
+                                    <Stats />
+                                ) : (
+                                    <Unavailable />
+                                )
+                            }
+                        />
                         <Route path="super-admin" element={<SuperAdmin />} />
                         <Route path="inscription" element={<Register />} />
                         <Route path="*" element={<NotFound />} />
