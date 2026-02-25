@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import Timer from "../components/Timer";
 
 export default function Unavailable() {
     return (
@@ -7,6 +8,7 @@ export default function Unavailable() {
                 <p className="text-xl md:text-2xl text-amber-800 font-bold italic uppercase tracking-tighter mb-4">
                     Arrive prochainement...
                 </p>
+                <Timer />
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link
                         to="/"

@@ -3,7 +3,6 @@ import SosCard from "../components/SosCard";
 import { Link } from "react-router";
 
 export default function SosList() {
-    const sosDataExtend = [...sosData, ...sosData, ...sosData, ...sosData];
     return (
         <div className="max-w-6xl mx-auto px-4 animate-in fade-in duration-700">
             {/* Header de la page */}
@@ -20,7 +19,7 @@ export default function SosList() {
 
             {/* Grille de SOS */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {sosDataExtend.map((sos, index) => (
+                {sosData.map((sos, index) => (
                     <Link
                         key={index}
                         to={`/commander?id=${sos.id}`}

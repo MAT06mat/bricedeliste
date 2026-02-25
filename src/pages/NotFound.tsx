@@ -1,8 +1,8 @@
 import { Link } from "react-router";
-import { enable_full_features } from "../data/var";
+/* import { enable_full_features } from "../data/var"; */
 
 export default function NotFound() {
-    if (!enable_full_features) {
+    /* if (!enable_full_features) {
         return (
             <div className="min-h-[70vh] flex items-center justify-center md:px-4 animate-in fade-in zoom-in duration-500">
                 <div className="max-w-2xl w-full vintage-card p-10 px-8 md:p-12 rounded-[50px] border-b-8 border-brice-yellow text-center relative overflow-hidden">
@@ -25,7 +25,7 @@ export default function NotFound() {
                 </div>
             </div>
         );
-    }
+    } */
     return (
         <div className="min-h-[70vh] flex items-center justify-center md:px-4 animate-in fade-in zoom-in duration-500">
             <div className="max-w-2xl w-full vintage-card p-10 px-8 md:p-12 rounded-[50px] border-b-8 border-brice-yellow text-center relative overflow-hidden">

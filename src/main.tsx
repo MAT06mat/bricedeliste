@@ -16,6 +16,7 @@ import { bloc_sos_command, enable_full_features } from "./data/var";
 import Unavailable from "./pages/Unavailable";
 import "./index.css";
 import "./data/text_console";
+import Socials from "./pages/Socials";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -52,6 +53,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                                 )
                             }
                         />
+                        <Route path="reseaux" element={<Socials />} />
                         <Route path="super-admin" element={<SuperAdmin />} />
                         <Route path="inscription" element={<Register />} />
                         <Route path="*" element={<NotFound />} />

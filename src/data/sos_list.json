@@ -7,8 +7,7 @@
     {
         "id": "mime",
         "name": "Le Mime Insupportable",
-        "description": "Un membre vient mimer tous les faits et gestes de la cible pendant 5 min.",
-        "textOnSelect": "Attention, le mime peut être très long à se mettre en place. Assurez-vous que la cible est bien dans un endroit où elle ne risque pas de déranger quelqu'un d'autre."
+        "description": "Un membre vient mimer tous les faits et gestes de la cible pendant 5 min."
     },
     {
         "id": "yellow_card",

@@ -302,16 +302,6 @@ export default function OrderForm() {
                                 </option>
                             ))}
                         </select>
-                        {sosData.find((sos) => sos.id === formData.sosId)
-                            ?.textOnSelect && (
-                            <div className="p-3 bg-amber-100 border-l-4 border-amber-400 text-amber-800 italic text-sm rounded-xl mt-2 mb-5">
-                                {
-                                    sosData.find(
-                                        (sos) => sos.id === formData.sosId,
-                                    )?.textOnSelect
-                                }
-                            </div>
-                        )}
                     </div>
 
                     <textarea
@@ -325,9 +315,6 @@ export default function OrderForm() {
                     {/* --- CUSTOM DATE & TIME PICKER --- */}
                     <label className="text-xs font-bold uppercase text-amber-700 ml-2">
                         Quand est-ce qu'on casse ?
-                        <span className="w-max text-nowrap text-[9px] text-amber-600 italic ml-2">
-                            * Hors week-end
-                        </span>
                     </label>
 
                     <div className="grid grid-cols-1 gap-4">
@@ -336,8 +323,8 @@ export default function OrderForm() {
                             <input
                                 type="date"
                                 required
-                                min={todayStr}
-                                max="2026-12-31"
+                                min="2026-03-02"
+                                max="2026-03-06"
                                 value={formData.day}
                                 className="w-full bg-white border-2 border-amber-200 p-2 rounded-xl outline-none focus:border-brice-yellow text-amber-900 font-bold cursor-pointer"
                                 onChange={(e) =>

@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 export default function Home() {
     return (
         <div className="text-center space-y-12 animate-in fade-in zoom-in duration-700">
@@ -47,7 +49,7 @@ export default function Home() {
                         Bienvenue sur le spot de la liste CDP la plus cassante
                         de l'INSA Lyon. On n'attend pas la vague, on la crée.
                         Prépare tes meilleurs vents, car ici, on est là pour
-                        gagner (et surtout pour casser).
+                        gagner (et surtout pour tout casser).
                     </p>
 
                     {/* Video Container */}
@@ -69,6 +71,35 @@ export default function Home() {
                         <div className="h-2 w-2 rounded-full bg-brice-yellow opacity-60"></div>
                         <div className="h-2 w-2 rounded-full bg-brice-yellow opacity-30"></div>
                     </div>
+                </div>
+            </div>
+            <div className="max-w-4xl mx-auto vintage-card p-8 md:p-10 rounded-[40px] border-b-8 border-brice-yellow relative overflow-hidden group">
+                {/* Déco palmier en fond */}
+                <div className="absolute -right-10 -bottom-10 text-9xl opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-1000">
+                    🌴
+                </div>
+
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="text-center md:text-left">
+                        <h2 className="text-3xl md:text-4xl font-black italic text-amber-900 uppercase leading-none">
+                            Tu veux{" "}
+                            <span className="text-brice-yellow text-stroke-sm text-white">
+                                suivre
+                            </span>{" "}
+                            la vague ?
+                        </h2>
+                        <p className="text-amber-800 font-bold mt-2 text-sm md:text-base">
+                            Toutes nos actus, nos vannes et nos vagues sur les
+                            réseaux.
+                        </p>
+                    </div>
+
+                    <Link
+                        to="/reseaux"
+                        className="bg-amber-900 text-brice-yellow font-black px-8 py-4 rounded-2xl shadow-[4px_4px_0px_0px_#ffdf00] hover:scale-105 active:translate-y-1 transition-all uppercase italic tracking-wider text-sm text-nowrap"
+                    >
+                        Rejoindre la team 🤙
+                    </Link>
                 </div>
             </div>
         </div>

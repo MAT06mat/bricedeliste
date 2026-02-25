@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 import type { StatsData } from "../types/stats";
-import { useAuth } from "../hooks/useAuth";
+/* import { useAuth } from "../hooks/useAuth"; */
 import sosData from "../data/sos_list.json";
 
 const defaultStats: StatsData = {
@@ -15,7 +15,7 @@ const defaultStats: StatsData = {
 };
 
 export default function Stats() {
-    const { isLoggedIn, super_admin } = useAuth();
+    /* const { isLoggedIn, super_admin } = useAuth(); */
     const [stats, setStats] = useState<StatsData>(defaultStats);
     const [toast, setToast] = useState<{
         message: string;
@@ -47,7 +47,7 @@ export default function Stats() {
         };
     }, [fetchStats]);
 
-    const handleResetAll = async () => {
+    /* const handleResetAll = async () => {
         const firstConfirm = window.confirm(
             "ATTENTION : Tu vas supprimer TOUS les SOS et réinitialiser les statistiques. Tu es sûr de vouloir tout casser ?"
         );
@@ -73,7 +73,7 @@ export default function Stats() {
                 }
             }
         }
-    };
+    }; */
 
     return (
         <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 md:px-4">
@@ -129,7 +129,7 @@ export default function Stats() {
                     emoji="🌊"
                 />
             </div>
-            {super_admin && isLoggedIn && (
+            {/* super_admin && isLoggedIn && (
                 <div className="flex flex-col sm:flex-row gap-3 pt-4 w-full md:w-auto">
                     <button
                         onClick={handleResetAll}
@@ -138,7 +138,7 @@ export default function Stats() {
                         💣 Reset All
                     </button>
                 </div>
-            )}
+            ) */}
 
             {toast && (
                 <Toast

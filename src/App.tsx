@@ -149,7 +149,7 @@ export default function App() {
 
                 {/* Mobile Menu Overlay */}
                 <div
-                    className={`fixed inset-0 bg-brice-yellow transition-transform duration-500 ease-in-out lg:hidden flex flex-col items-center justify-center space-y-8 ${
+                    className={`fixed inset-0 overflow-hidden bg-brice-yellow transition-transform duration-500 ease-in-out lg:hidden flex flex-col items-center justify-center space-y-8 ${
                         isMenuOpen ? "translate-y-0" : "-translate-y-full"
                     }`}
                 >
