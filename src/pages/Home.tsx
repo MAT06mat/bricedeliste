@@ -19,7 +19,7 @@ export default function Home() {
                 {[
                     {
                         title: "Jaune",
-                        desc: "Plus qu'une couleur, une religion.",
+                        desc: "Plus qu'une couleur, une passion.",
                     },
                     { title: "Casser", desc: "Notre sport national favori." },
                     {
