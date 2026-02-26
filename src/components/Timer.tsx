@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { release_date } from "../data/var";
+import { getSyncedNow } from "../services/timeSync";
 
 function Timer() {
     const calculateTimeLeft = () => {
-        const difference = release_date.getTime() - new Date().getTime();
+        const difference = release_date.getTime() - getSyncedNow();
         return Math.max(0, difference);
     };
 

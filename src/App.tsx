@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from "react-router";
 import { useAuth } from "./hooks/useAuth";
 import Footer from "./components/Footer";
 import { useEffect } from "react";
+import { syncTimeWithServer } from "./services/timeSync";
 
 export default function App() {
     const { isLoggedIn, super_admin, logout, auth } = useAuth();
@@ -14,6 +15,10 @@ export default function App() {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
+
+    useEffect(() => {
+        syncTimeWithServer();
+    }, []);
 
     useEffect(() => {
         pageRef.current?.scrollTo(0, 0);
