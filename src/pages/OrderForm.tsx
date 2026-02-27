@@ -128,7 +128,7 @@ export default function OrderForm() {
     };
 
     const validateRoom = (room: string) => {
-        const regex = /^[A-J]|M\d\d\d$/i;
+        const regex = /^([A-J]|M)\d{3}$/i;
         return regex.test(room);
     };
 
@@ -173,8 +173,20 @@ export default function OrderForm() {
             return;
         }
 
+        let sosId = formData.sosId;
+        if (formData.sosId === "random") {
+            const sosDataWithoutRandom = sosData.filter(
+                (s) => s.id !== "random",
+            );
+            const randomSos =
+                sosDataWithoutRandom[
+                    Math.floor(Math.random() * sosDataWithoutRandom.length)
+                ];
+            sosId = randomSos.id;
+        }
+
         try {
-            await apiService.createOrder(formData);
+            await apiService.createOrder({ ...formData, sosId });
             setTodaySubmit(todayStr + ":::" + (numberOfSubmissionsToday + 1));
             setIsSubmitted(true);
         } catch (err: unknown) {
@@ -224,6 +236,44 @@ export default function OrderForm() {
 
     return (
         <>
+            <div className="max-w-xl mx-auto vintage-card p-8 md:p-12 mb-12 rounded-3xl border-b-8 border-brice-yellow relative overflow-hidden group">
+                <div className="relative z-10">
+                    <h2 className="text-3xl font-black italic text-amber-900 uppercase tracking-tighter mb-6">
+                        Salut les Hackers !
+                    </h2>
+
+                    <div className="space-y-4 text-amber-900 font-medium leading-relaxed">
+                        <p>
+                            Bien joué pour avoir déjoué les petites sécurités du
+                            site ! Perso, je trouve ça drôle que vous ayez tenté
+                            de voir cette page à l'avance et d'envoyer des SOS à
+                            l'avance, alors je vous laisse faire vos expériences
+                        </p>
+
+                        <p>
+                            Par contre, merci d'éviter d'envoyer des attaques
+                            personnelles à ceux qui essaient de faire
+                            fonctionner le site, ou de spammer le formulaire
+                            pour faire planter le serveur. Ce n'est pas vraiment
+                            dans l'esprit de la campagne CDP ... 😉.
+                        </p>
+
+                        <p>
+                            Ça pèse vraiment sur le moral des gens qui ont passé
+                            beaucoup de temps à créer le site, alors soyez
+                            sympas avec eux (et moi). On vous prépare ça pour
+                            vous offrir une expérience cool et fun !
+                        </p>
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t-2 border-dashed border-amber-900/10 flex items-center justify-between">
+                        <p className="text-xs font-black uppercase tracking-widest text-amber-700">
+                            Merci les hackers, vous êtes les meilleurs !
+                        </p>
+                        <span className="text-2xl animate-bounce">🏄‍♂️</span>
+                    </div>
+                </div>
+            </div>
             <div
                 key="2"
                 className="max-w-xl mx-auto vintage-card p-4 md:p-8 rounded-3xl animate-in slide-in-from-bottom-8 duration-500"
@@ -234,7 +284,6 @@ export default function OrderForm() {
                     </h2>
                     <div className="h-1 w-24 bg-brice-yellow mx-auto mt-2"></div>
                 </div>
-
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="space-y-1">
                         <label className="text-xs font-bold uppercase text-amber-700 ml-2">

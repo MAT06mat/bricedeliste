@@ -135,4 +135,9 @@ export const apiService = {
             method: "POST",
             body: { action: "reset_all" },
         }),
+    resetStat: (data: string, stat: string): Promise<StatsData> =>
+        request({
+            method: "POST",
+            body: { action: "reset_stat", data, stat },
+        }),
 };

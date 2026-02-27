@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 import type { StatsData } from "../types/stats";
-/* import { useAuth } from "../hooks/useAuth"; */
+import { useAuth } from "../hooks/useAuth";
 import sosData from "../data/sos_list.json";
 import { useFullFeatureEnabled } from "../data/var";
 import Unavailable from "./Unavailable";
@@ -17,7 +17,9 @@ const defaultStats: StatsData = {
 };
 
 export default function Stats() {
-    /* const { isLoggedIn, super_admin } = useAuth(); */
+    const { isLoggedIn, super_admin } = useAuth();
+
+    const [modif, setModif] = useState(false);
     const [stats, setStats] = useState<StatsData>(defaultStats);
     const [toast, setToast] = useState<{
         message: string;
@@ -51,35 +53,29 @@ export default function Stats() {
 
     const isFullFeatureAnable = useFullFeatureEnabled();
 
-    if (!isFullFeatureAnable) return <Unavailable />;
-
-    /* const handleResetAll = async () => {
-        const firstConfirm = window.confirm(
-            "ATTENTION : Tu vas supprimer TOUS les SOS et réinitialiser les statistiques. Tu es sûr de vouloir tout casser ?"
-        );
-
-        if (firstConfirm) {
-            const secondConfirm = window.confirm(
-                "Dernière chance... On efface vraiment tout ?"
-            );
-            if (secondConfirm) {
-                try {
-                    await apiService.resetAll();
-                    setToast({
-                        message:
-                            "Le spot est comme neuf, plus une seule vague !",
-                        type: "success",
-                    });
-                    await fetchStats();
-                } catch {
-                    setToast({
-                        message: "Erreur lors du reset.",
-                        type: "error",
-                    });
-                }
+    const handleDelete = async (data: string, title: string) => {
+        if (
+            window.confirm(
+                `ATTENTION : Tu vas supprimer TOUS les SOS de ${data} dans ${title}. Tu es sûr de vouloir tout casser ?`,
+            )
+        ) {
+            try {
+                await apiService.resetStat(data, title);
+                setToast({
+                    message: "Les statistiques ont été réinitialisées.",
+                    type: "success",
+                });
+                await fetchStats();
+            } catch (err) {
+                setToast({
+                    message: `Erreur lors du reset : ${(err as Error).message}`,
+                    type: "error",
+                });
             }
         }
-    }; */
+    };
+
+    if (!isFullFeatureAnable) return <Unavailable />;
 
     return (
         <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 md:px-4">
@@ -115,12 +111,16 @@ export default function Stats() {
                     data={stats.top_requesters}
                     sub="Ceux qui cassent"
                     emoji="🤘"
+                    statName="requesters"
+                    handleDelete={modif ? handleDelete : undefined}
                 />
                 <TopList
                     title="Top Cibles"
                     data={stats.top_targets}
                     sub="Ceux qui mangent"
                     emoji="🎯"
+                    statName="targets"
+                    handleDelete={modif ? handleDelete : undefined}
                 />
                 <TopList
                     title="Top Brice"
@@ -135,16 +135,18 @@ export default function Stats() {
                     emoji="🌊"
                 />
             </div>
-            {/* super_admin && isLoggedIn && (
+            {super_admin && isLoggedIn && (
                 <div className="flex flex-col sm:flex-row gap-3 pt-4 w-full md:w-auto">
                     <button
-                        onClick={handleResetAll}
+                        onClick={() => setModif((prev) => !prev)}
                         className="bg-red-600 text-white px-6 py-2 rounded-xl font-black text-xs uppercase hover:bg-red-700 transition-all shadow-[0_4px_0_0_#991b1b]"
                     >
-                        💣 Reset All
+                        {modif
+                            ? "Désactiver la déletion"
+                            : "Activer la déletion"}
                     </button>
                 </div>
-            ) */}
+            )}
 
             {toast && (
                 <Toast
@@ -213,11 +215,15 @@ function TopList({
     data,
     sub,
     emoji,
+    statName,
+    handleDelete,
 }: {
     title: string;
     data: Record<string, number>;
     sub: string;
     emoji: string;
+    statName?: string;
+    handleDelete?: (data: string, stat: string) => void;
 }) {
     if (!data) {
         data = {};
@@ -267,9 +273,24 @@ function TopList({
                                               ?.name || name}
                                 </span>
                             </div>
-                            <span className="text-xs font-black text-brice-yellow bg-amber-900 px-2 py-1 rounded-lg group-hover:scale-110 transition-transform">
-                                {count}
-                            </span>
+                            <div className="flex items-center gap-3">
+                                <span className="text-xs font-black text-brice-yellow bg-amber-900 px-2 py-1 rounded-lg group-hover:scale-110 transition-transform">
+                                    {count}
+                                </span>
+                                {handleDelete && (
+                                    <button
+                                        className="text-s text-red-600 hover:bg-red-600 hover:scale-120 transition-transform transition-colors rounded-lg bg-red-400"
+                                        onClick={() =>
+                                            handleDelete(
+                                                name,
+                                                statName || title,
+                                            )
+                                        }
+                                    >
+                                        🗑️
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     ))
                 )}

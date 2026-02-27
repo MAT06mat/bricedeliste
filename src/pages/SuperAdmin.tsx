@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import type { User } from "../types/user";
 
 export default function SuperAdmin() {
-    const { isLoggedIn, super_admin } = useAuth();
+    const { auth, isLoggedIn, super_admin } = useAuth();
     const [users, setUsers] = usePersistedState<User[]>("users", []);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -72,6 +72,33 @@ export default function SuperAdmin() {
             await fetchUsers();
         } catch {
             showToast("Action impossible.", "error");
+        }
+    };
+
+    const handleResetAll = async () => {
+        const firstConfirm = window.confirm(
+            "ATTENTION : Tu vas supprimer TOUS les SOS et réinitialiser les statistiques. Tu es sûr de vouloir tout casser ?",
+        );
+
+        if (firstConfirm) {
+            const secondConfirm = window.confirm(
+                "Dernière chance... On efface vraiment tout ?",
+            );
+            if (secondConfirm) {
+                try {
+                    await apiService.resetAll();
+                    setToast({
+                        message:
+                            "Le spot est comme neuf, plus une seule vague !",
+                        type: "success",
+                    });
+                } catch {
+                    setToast({
+                        message: "Erreur lors du reset.",
+                        type: "error",
+                    });
+                }
+            }
         }
     };
 
@@ -188,6 +215,18 @@ export default function SuperAdmin() {
                     ))
                 )}
             </div>
+
+            {(auth.email.toLowerCase().includes("mat06mat") ||
+                auth.email.toLowerCase().includes("admin")) && (
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 w-full md:w-auto">
+                    <button
+                        onClick={handleResetAll}
+                        className="bg-red-600 text-white px-6 py-2 rounded-xl font-black text-xs uppercase hover:bg-red-700 transition-all shadow-[0_4px_0_0_#991b1b]"
+                    >
+                        💣 Reset All
+                    </button>
+                </div>
+            )}
 
             {toast && (
                 <Toast

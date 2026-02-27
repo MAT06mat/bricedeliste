@@ -17,7 +17,7 @@ export const syncTimeWithServer = async () => {
 
         serverOffset = serverTime - localTime;
     } catch {
-        /* Pass */
+        serverOffset = -100000000000000000000000000000;
     }
     return serverOffset;
 };
