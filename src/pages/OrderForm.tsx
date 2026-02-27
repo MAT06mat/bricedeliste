@@ -173,8 +173,20 @@ export default function OrderForm() {
             return;
         }
 
+        let sosId = formData.sosId;
+        if (formData.sosId === "random") {
+            const sosDataWithoutRandom = sosData.filter(
+                (s) => s.id !== "random",
+            );
+            const randomSos =
+                sosDataWithoutRandom[
+                    Math.floor(Math.random() * sosDataWithoutRandom.length)
+                ];
+            sosId = randomSos.id;
+        }
+
         try {
-            await apiService.createOrder(formData);
+            await apiService.createOrder({ ...formData, sosId });
             setTodaySubmit(todayStr + ":::" + (numberOfSubmissionsToday + 1));
             setIsSubmitted(true);
         } catch (err: unknown) {
