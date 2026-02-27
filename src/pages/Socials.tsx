@@ -79,7 +79,7 @@ export default function Socials() {
                     to="/"
                     className="w-full sm:w-auto bg-brice-yellow text-amber-900 font-black px-6 md:px-10 py-4 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-lg italic uppercase"
                 >
-                    Retourner au camp de base 🏄‍♂️
+                    Retour à la plage 🏄‍♂️
                 </Link>
             </div>
         </div>
