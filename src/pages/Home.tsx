@@ -58,7 +58,7 @@ export default function Home() {
                         <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border-4 border-white">
                             <iframe
                                 className="w-full h-full"
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                src="https://www.youtube.com/embed/wkthBj3aFRk"
                                 title="Présentation Brice"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen

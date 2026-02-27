@@ -74,7 +74,7 @@ export default function Socials() {
                 ))}
             </div>
 
-            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center text-center gap-4">
                 <Link
                     to="/"
                     className="w-full sm:w-auto bg-brice-yellow text-amber-900 font-black px-6 md:px-10 py-4 rounded-2xl shadow-[0_4px_0_0_#b49600] brice-button text-lg italic uppercase"
