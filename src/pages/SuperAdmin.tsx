@@ -216,17 +216,17 @@ export default function SuperAdmin() {
                 )}
             </div>
 
-            {auth.email.includes("mat06mat22") ||
-                (auth.email.includes("admin") && (
-                    <div className="flex flex-col sm:flex-row gap-3 pt-4 w-full md:w-auto">
-                        <button
-                            onClick={handleResetAll}
-                            className="bg-red-600 text-white px-6 py-2 rounded-xl font-black text-xs uppercase hover:bg-red-700 transition-all shadow-[0_4px_0_0_#991b1b]"
-                        >
-                            💣 Reset All
-                        </button>
-                    </div>
-                ))}
+            {(auth.email.toLowerCase().includes("mat06mat") ||
+                auth.email.toLowerCase().includes("admin")) && (
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 w-full md:w-auto">
+                    <button
+                        onClick={handleResetAll}
+                        className="bg-red-600 text-white px-6 py-2 rounded-xl font-black text-xs uppercase hover:bg-red-700 transition-all shadow-[0_4px_0_0_#991b1b]"
+                    >
+                        💣 Reset All
+                    </button>
+                </div>
+            )}
 
             {toast && (
                 <Toast
