@@ -1,6 +1,6 @@
 import { useSyncedNow } from "../services/timeSync";
 
-export const release_date = Object.freeze(new Date("2026-02-28T16:00:00"));
+export const release_date = Object.freeze(new Date("2026-02-28T20:00:00"));
 export const release_date_2 = Object.freeze(new Date("2026-02-29T20:00:00"));
 
 export const useFullFeatureEnabled = () => {
