@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 import { usePersistedState } from "../hooks/usePersistedState";
-import { useFullFeatureEnabled } from "../data/var";
+import { useFullFeatureEnabled2 } from "../data/var";
 import Unavailable from "./Unavailable";
 
 export default function OrderForm() {
@@ -118,9 +118,9 @@ export default function OrderForm() {
         getDayOfWeek,
     ]);
 
-    const isFullFeatureAnable = useFullFeatureEnabled();
+    const isFullFeatureAnable = useFullFeatureEnabled2();
 
-    if (!isFullFeatureAnable) return <Unavailable />;
+    if (!isFullFeatureAnable) return <Unavailable date={2} />;
 
     const validateEmail = (email: string) => {
         const regex = /^[a-z0-9._%+-]+\.[a-z0-9._%+-]+@insa-lyon\.fr$/i;

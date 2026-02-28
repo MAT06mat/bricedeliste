@@ -4,7 +4,7 @@ import Toast from "../components/Toast";
 import type { StatsData } from "../types/stats";
 import { useAuth } from "../hooks/useAuth";
 import sosData from "../data/sos_list.json";
-import { useFullFeatureEnabled } from "../data/var";
+import { useFullFeatureEnabled2 } from "../data/var";
 import Unavailable from "./Unavailable";
 import Container from "../components/Container";
 
@@ -52,7 +52,7 @@ export default function Stats() {
         };
     }, [fetchStats]);
 
-    const isFullFeatureAnable = useFullFeatureEnabled();
+    const isFullFeatureAnable = useFullFeatureEnabled2();
 
     const handleDelete = async (data: string, title: string) => {
         if (
@@ -76,7 +76,7 @@ export default function Stats() {
         }
     };
 
-    if (!isFullFeatureAnable) return <Unavailable />;
+    if (!isFullFeatureAnable) return <Unavailable date={2} />;
 
     return (
         <Container className="!space-y-4 md:!space-y-12">

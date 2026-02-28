@@ -1,15 +1,19 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { release_date } from "../data/var";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { release_date, release_date_2 } from "../data/var";
 import { ServerOffsetContext } from "../services/timeSync";
 
-function Timer() {
+function Timer({ date = 1 }: { date?: 1 | 2 }) {
     const serverOffset = useContext(ServerOffsetContext);
+
+    const release_date_to_use = useMemo(() => {
+        return date === 1 ? release_date : release_date_2;
+    }, [date]);
 
     const calculateTimeLeft = useCallback(() => {
         const difference =
-            release_date.getTime() - new Date().getTime() - serverOffset;
+            release_date_to_use.getTime() - new Date().getTime() - serverOffset;
         return Math.max(0, difference);
-    }, [serverOffset]);
+    }, [serverOffset, release_date_to_use]);
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
