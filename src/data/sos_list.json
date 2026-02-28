@@ -1,27 +1,72 @@
 [
     {
-        "id": "casse_de_brice",
-        "name": "La Crêpe Piégée",
-        "description": "On livre une crêpe, mais elle est remplie de moutarde."
+        "id": "random",
+        "name": "SOS random",
+        "description": "Choisit un SOS aléatoirement à ta place parmi la liste ci-dessous"
     },
     {
         "id": "cafe_du_coin",
-        "name": "Le Mime Insupportable",
-        "description": "Un membre vient mimer tous les faits et gestes de la cible pendant 5 min."
+        "name": "Café du coin",
+        "description": "On débarque dans ta turne comme au café du coin"
     },
     {
-        "id": "reperage_yellow",
-        "name": "Le Casse de Brice",
-        "description": "On vient voir la personne et on lui met un vent mémorable devant tout le monde."
+        "id": "noyade",
+        "name": "Noyade",
+        "description": "Brice te défie dans une balle neuve à l'eau de mer"
     },
     {
         "id": "concours_surf",
-        "name": "Le Lancer de Confettis",
-        "description": "On lance une pluie de confettis sur la personne ciblée."
+        "name": "Cours de surf",
+        "description": "Petit cours de surf personnalisé par Brice en personne (attention aux vagues)"
     },
     {
-        "id": "random",
-        "name": "Le SOS random",
-        "description": "Choisi un SOS au hasard."
+        "id": "casse_de_brice",
+        "name": "Le casse de brice",
+        "description": "Brice te casse toi et ta turne (pillage de turne à l'horizon)"
+    },
+    {
+        "id": "relooking_brice",
+        "name": "Relooking en Brice",
+        "description": "On reprend ton style vestimentaire pour égaler la classe de Brice"
+    },
+    {
+        "id": "paparazzi",
+        "name": "Paparazzi",
+        "description": "Séance de shooting photo avec le légendaire Brice (quelle chance !)"
+    },
+    {
+        "id": "summer_bodhi",
+        "name": "Summer bodhi",
+        "description": "On te fait une séance de sport à domicile pour ressembler à ton idole Bodhi"
+    },
+    {
+        "id": "reperage_yellow",
+        "name": "Repérage de yellow",
+        "description": "Ça part en before dans ta turne"
+    },
+    {
+        "id": "briceologue",
+        "name": "Brice'ologue",
+        "description": "Brice vient écouter tes problèmes et chercher une solution, mais à sa façon"
+    },
+    {
+        "id": "reveil_sirene",
+        "name": "Réveil de la sirène",
+        "description": "Une magnifique sirène vient te réveiller en douceur"
+    },
+    {
+        "id": "planchiglisse",
+        "name": "Planch'iglisse",
+        "description": "Séance de ventriglisse sur un surf terrestre (un skate) dans le couloir"
+    },
+    {
+        "id": "coupe_cheveux",
+        "name": "Cherche pas, ton charisme est pas dans tes cheveux",
+        "description": "On te fait une coupe de cheveux avec autant de charisme que celle de Brice"
+    },
+    {
+        "id": "vague_froid",
+        "name": "La vague de froid",
+        "description": "On kidnappe ta couette (il fait chaud dans le Sud, pas besoin de couette)"
     }
 ]

@@ -127,7 +127,7 @@ export default function Home() {
 
                     <Link
                         to="/reseaux"
-                        className="bg-amber-900 text-brice-yellow font-black px-8 py-4 rounded-2xl shadow-[4px_4px_0px_0px_#ffdf00] hover:scale-105 active:translate-y-1 transition-all uppercase italic tracking-wider text-sm text-nowrap"
+                        className="bg-amber-900 text-brice-yellow font-black px-8 py-4 rounded-2xl shadow-[4px_4px_0px_0px_#ffdf0090] hover:scale-105 active:translate-y-1 transition-all uppercase italic tracking-wider text-sm text-nowrap"
                     >
                         Rejoindre la team 🤙
                     </Link>

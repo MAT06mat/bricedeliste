@@ -9,7 +9,7 @@ export default function SosCard({ sos, index }: { sos: Sos; index: number }) {
 
     if (styleIndex === 0) {
         return (
-            <div className="h-full group relative bg-brice-yellow p-8 rounded-[60px] rounded-tl-none border-b-8 border-r-8 border-yellow-600 hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center text-center">
+            <div className="h-full group relative bg-brice-yellow p-8 rounded-[40px] rounded-tl-none border-b-8 border-r-8 border-yellow-600 hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center text-center">
                 <span className="absolute -top-6 -left-7 text-5xl rotate-[-15deg] group-hover:rotate-0 transition-transform">
                     🏄‍♂️
                 </span>
@@ -120,7 +120,7 @@ export default function SosCard({ sos, index }: { sos: Sos; index: number }) {
 
     if (styleIndex === 6) {
         return (
-            <div className="h-full relative bg-brice-yellow p-8 rounded-[40px] shadow-xl overflow-hidden group flex flex-col items-center justify-center min-h-[250px] border-b-8 border-yellow-600">
+            <div className="h-full relative bg-brice-yellow p-8 rounded-[40px] shadow-xl overflow-hidden group flex flex-col items-center justify-center min-h-[200px] border-b-8 border-yellow-600">
                 {/* Palmier Gauche */}
                 <div className="absolute -bottom-2 -left-4 text-7xl opacity-40 group-hover:opacity-70 transition-opacity transition-transform rotate-12 group-hover:rotate-0 duration-700 pointer-events-none">
                     🌴
@@ -155,9 +155,6 @@ export default function SosCard({ sos, index }: { sos: Sos; index: number }) {
                 <p className="text-amber-700 font-mono text-xs uppercase font-bold">
                     {sos.description}
                 </p>
-                <div className="mt-6 font-black italic text-4xl text-amber-900 group-hover:scale-110 transition-transform">
-                    CASSÉ !
-                </div>
             </div>
         </div>
     );
