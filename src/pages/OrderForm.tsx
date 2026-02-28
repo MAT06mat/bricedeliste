@@ -35,7 +35,7 @@ export default function OrderForm() {
         email: "",
         targetName: "",
         targetRoom: "",
-        sosId: "",
+        sosId: defaultSosId ?? "",
         desc: "",
         day: "",
         time: "",

@@ -1,8 +1,9 @@
 import { Link } from "react-router";
+import Container from "../components/Container";
 
 export default function Home() {
     return (
-        <div className="text-center space-y-12 animate-in fade-in zoom-in duration-700">
+        <Container>
             {/* Hero Title */}
             <div className="relative inline-block">
                 <h1 className="text-7xl md:text-9xl font-black text-white italic drop-shadow-[0_8px_0px_rgba(0,0,0,0.2)] tracking-tighter">
@@ -15,7 +16,7 @@ export default function Home() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
                 {[
                     {
                         title: "Jaune",
@@ -39,7 +40,7 @@ export default function Home() {
                 ))}
             </div>
 
-            <div className="vintage-card p-1 md:p-8 rounded-[40px] max-w-3xl mx-auto overflow-hidden">
+            <div className="vintage-card p-1 md:p-8 max-w-4xl mx-auto rounded-[40px] overflow-hidden">
                 <div className="bg-white/50 rounded-[32px] p-6 md:p-10 border-2 border-dashed border-amber-900/20">
                     <h2 className="text-3xl font-black mb-4 text-amber-900 italic uppercase">
                         Salut, ça farte ? 🏄‍♂️
@@ -73,7 +74,37 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-4xl mx-auto vintage-card p-8 md:p-10 rounded-[40px] border-b-8 border-brice-yellow relative overflow-hidden group">
+
+            <div className="vintage-card p-8 md:p-10 rounded-[40px] border-b-8 border-cyan-500 relative overflow-hidden group">
+                <div className="absolute -left-10 -bottom-10 text-9xl opacity-10 -rotate-12 group-hover:rotate-0 transition-transform duration-1000">
+                    🏄‍♂️
+                </div>
+
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="text-center md:text-left">
+                        <h2 className="text-3xl md:text-4xl font-black italic text-amber-900 uppercase leading-none">
+                            Envie de{" "}
+                            <span className="text-cyan-500 text-stroke-sm text-white">
+                                casser
+                            </span>{" "}
+                            quelqu'un ?
+                        </h2>
+                        <p className="text-amber-800 font-bold mt-2 text-sm md:text-base">
+                            Parcoure notre catalogue de SOS et sélectionne la
+                            vague parfaite pour tes potes.
+                        </p>
+                    </div>
+
+                    <Link
+                        to="/sos"
+                        className="bg-cyan-600 text-white font-black px-8 py-4 rounded-2xl shadow-[4px_4px_0px_0px_#0891b250] hover:scale-105 active:translate-y-1 transition-all uppercase italic tracking-wider text-sm text-nowrap"
+                    >
+                        Voir nos SOS 🤙
+                    </Link>
+                </div>
+            </div>
+
+            <div className="vintage-card p-8 md:p-10 rounded-[40px] border-b-8 border-brice-yellow relative overflow-hidden group">
                 {/* Déco palmier en fond */}
                 <div className="absolute -right-10 -bottom-10 text-9xl opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-1000">
                     🌴
@@ -102,6 +133,6 @@ export default function Home() {
                     </Link>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }

@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import sosData from "../data/sos_list.json";
 import { useFullFeatureEnabled } from "../data/var";
 import Unavailable from "./Unavailable";
+import Container from "../components/Container";
 
 const defaultStats: StatsData = {
     total: 0,
@@ -78,9 +79,9 @@ export default function Stats() {
     if (!isFullFeatureAnable) return <Unavailable />;
 
     return (
-        <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 md:px-4">
+        <Container className="!space-y-4 md:!space-y-12">
             {/* Main Title */}
-            <div className="bg-brice-yellow p-6 md:mb-16 rounded-3xl shadow-xl border-b-8 border-yellow-600 text-center transform -rotate-1">
+            <div className="bg-brice-yellow p-6 md:!mb-20 !mb-8 rounded-3xl shadow-xl border-b-8 border-yellow-600 text-center transform -rotate-1">
                 <h1 className="text-4xl md:text-6xl font-black italic text-amber-900 uppercase tracking-tighter">
                     Le Tableau des Vagues
                 </h1>
@@ -155,7 +156,7 @@ export default function Stats() {
                     onClose={() => setToast(null)}
                 />
             )}
-        </div>
+        </Container>
     );
 }
 
