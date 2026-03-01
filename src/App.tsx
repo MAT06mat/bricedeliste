@@ -11,7 +11,6 @@ export function SyncTime({ children }: { children: ReactNode }) {
     useEffect(() => {
         async function getTime() {
             const t = await syncTimeWithServer();
-            console.log(t);
             if (t < -5000 || t > 5000) setTime(t);
         }
         getTime();
