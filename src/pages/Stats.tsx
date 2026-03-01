@@ -246,11 +246,11 @@ function TopList({
                     entries.map(([name, count], index) => (
                         <div
                             key={name}
-                            className="flex items-center justify-between bg-white/40 p-3 rounded-2xl border border-amber-100 hover:bg-white transition-colors group"
+                            className="flex items-center gap-3 justify-between bg-white/40 p-3 rounded-2xl border border-amber-100 hover:bg-white transition-colors group"
                         >
                             <div className="flex items-center gap-3 overflow-hidden">
                                 <span
-                                    className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${
+                                    className={`flex-none w-6 h-6 min-w-max rounded-full flex items-center justify-center text-[10px] font-black ${
                                         index === 0
                                             ? "bg-brice-yellow text-amber-900"
                                             : "bg-amber-100 text-amber-700"
@@ -258,7 +258,7 @@ function TopList({
                                 >
                                     {index + 1}
                                 </span>
-                                <span className="text-xs font-bold text-amber-900 truncate uppercase tracking-tighter">
+                                <span className="max-w-full text-xs font-bold text-amber-900 truncate uppercase tracking-tighter">
                                     {name.includes("@")
                                         ? name
                                               .split("@")[0]
