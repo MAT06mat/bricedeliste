@@ -1,27 +1,8 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { useAuth } from "./hooks/useAuth";
 import Footer from "./components/Footer";
 import { useEffect } from "react";
-import { ServerOffsetContext, syncTimeWithServer } from "./services/timeSync";
-
-export function SyncTime({ children }: { children: ReactNode }) {
-    const [time, setTime] = useState(0);
-
-    useEffect(() => {
-        async function getTime() {
-            const t = await syncTimeWithServer();
-            if (t < -5000 || t > 5000) setTime(t);
-        }
-        getTime();
-    }, [setTime]);
-
-    return (
-        <ServerOffsetContext.Provider value={time}>
-            {children}
-        </ServerOffsetContext.Provider>
-    );
-}
 
 export default function App() {
     const { isLoggedIn, super_admin, logout, auth } = useAuth();
