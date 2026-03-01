@@ -104,6 +104,41 @@ export default function Home() {
                 </div>
             </div>
 
+            <div className="vintage-card p-1 md:p-8 max-w-4xl mx-auto rounded-[40px] overflow-hidden">
+                <div className="bg-white/50 rounded-[32px] p-6 md:p-10 border-2 border-dashed border-amber-900/20">
+                    <h2 className="text-3xl font-black mb-4 text-amber-900 italic uppercase">
+                        Attention à la vague ! 🌊
+                    </h2>
+
+                    <p className="mb-8 text-lg text-amber-800 font-medium leading-relaxed">
+                        Partout, de Lyon à Nice, on est là pour vous ambiancer
+                        et pour préparer l’inté ! Viens écouter notre rap et
+                        surfer sur la wave ! Le Brice de liste débarque pour
+                        nous faire briller !
+                    </p>
+
+                    {/* Video Container */}
+                    <div className="relative group">
+                        <div className="absolute -inset-2 bg-brice-yellow rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                        <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border-4 border-white">
+                            <iframe
+                                className="w-full h-full"
+                                src="https://www.youtube.com/embed/E3eTIzFGMS8"
+                                title="Présentation Brice"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mt-10 flex justify-center gap-4">
+                        <div className="h-2 w-2 rounded-full bg-brice-yellow"></div>
+                        <div className="h-2 w-2 rounded-full bg-brice-yellow opacity-60"></div>
+                        <div className="h-2 w-2 rounded-full bg-brice-yellow opacity-30"></div>
+                    </div>
+                </div>
+            </div>
+
             <div className="vintage-card p-8 md:p-10 rounded-[40px] border-b-8 border-brice-yellow relative overflow-hidden group">
                 {/* Déco palmier en fond */}
                 <div className="absolute -right-10 -bottom-10 text-9xl opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-1000">

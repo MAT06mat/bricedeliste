@@ -5,8 +5,6 @@ import { Link } from "react-router";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
 import { usePersistedState } from "../hooks/usePersistedState";
-import { useFullFeatureEnabled2 } from "../data/var";
-import Unavailable from "./Unavailable";
 
 export default function OrderForm() {
     const params = new URLSearchParams(window.location.search);
@@ -117,10 +115,6 @@ export default function OrderForm() {
         isSlotDisabled,
         getDayOfWeek,
     ]);
-
-    const isFullFeatureAnable = useFullFeatureEnabled2();
-
-    if (!isFullFeatureAnable) return <Unavailable date={2} />;
 
     const validateEmail = (email: string) => {
         const regex = /^[a-z0-9._%+-]+\.[a-z0-9._%+-]+@insa-lyon\.fr$/i;

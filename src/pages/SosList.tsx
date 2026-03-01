@@ -1,15 +1,9 @@
 import sosData from "../data/sos_list.json";
 import SosCard from "../components/SosCard";
 import { Link } from "react-router";
-import { useFullFeatureEnabled } from "../data/var";
-import Unavailable from "./Unavailable";
 import Container from "../components/Container";
 
 export default function SosList() {
-    const isFullFeatureAnable = useFullFeatureEnabled();
-
-    if (!isFullFeatureAnable) return <Unavailable />;
-
     return (
         <Container className="max-w-6xl">
             {/* Header de la page */}
