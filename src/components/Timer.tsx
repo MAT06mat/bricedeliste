@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { release_date } from "../data/var";
-import { getSyncedNow } from "../services/timeSync";
+import { ServerOffsetContext } from "../services/timeSync";
 
 function Timer() {
-    const calculateTimeLeft = () => {
-        const difference = release_date.getTime() - getSyncedNow();
+    const serverOffset = useContext(ServerOffsetContext);
+
+    const calculateTimeLeft = useCallback(() => {
+        const difference =
+            release_date.getTime() - new Date().getTime() - serverOffset;
         return Math.max(0, difference);
-    };
+    }, [serverOffset]);
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
@@ -14,12 +17,9 @@ function Timer() {
         const interval = setInterval(() => {
             const nextTime = calculateTimeLeft();
             setTimeLeft(nextTime);
-
-            if (nextTime <= 0) clearInterval(interval);
         }, 1000);
-
         return () => clearInterval(interval);
-    }, []);
+    }, [calculateTimeLeft]);
 
     const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
     const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);

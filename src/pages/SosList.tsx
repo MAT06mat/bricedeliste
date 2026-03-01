@@ -1,8 +1,14 @@
 import sosData from "../data/sos_list.json";
 import SosCard from "../components/SosCard";
 import { Link } from "react-router";
+import { useFullFeatureEnabled } from "../data/var";
+import Unavailable from "./Unavailable";
 
 export default function SosList() {
+    const isFullFeatureAnable = useFullFeatureEnabled();
+
+    if (!isFullFeatureAnable) return <Unavailable />;
+
     return (
         <div className="max-w-6xl mx-auto px-4 animate-in fade-in duration-700">
             {/* Header de la page */}

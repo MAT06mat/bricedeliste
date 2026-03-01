@@ -1,24 +1,28 @@
-import { API_URL } from "../data/api";
+import { createContext, useContext } from "react";
 
-let serverOffset = 0;
+export const ServerOffsetContext = createContext(0);
 
 export const syncTimeWithServer = async () => {
+    let serverOffset = 0;
     try {
-        const response = await fetch(API_URL, {
-            method: "HEAD",
-        });
-        const serverDateStr = response.headers.get("Date");
+        const response = await fetch(
+            "https://time.now/developer/api/timezone/Europe/Paris",
+        );
+        if (!response.ok) throw new Error("Server unreachable");
 
-        if (serverDateStr) {
-            const serverTime = new Date(serverDateStr).getTime();
-            const localTime = new Date().getTime();
-            serverOffset = serverTime - localTime;
-        }
+        const data = await response.json();
+
+        const serverTime = data.unixtime * 1000;
+        const localTime = new Date().getTime();
+
+        serverOffset = serverTime - localTime;
     } catch {
         /* Pass */
     }
+    return serverOffset;
 };
 
-export const getSyncedNow = () => {
+export const useSyncedNow = () => {
+    const serverOffset = useContext(ServerOffsetContext);
     return new Date().getTime() + serverOffset;
 };

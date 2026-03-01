@@ -4,6 +4,8 @@ import Toast from "../components/Toast";
 import type { StatsData } from "../types/stats";
 /* import { useAuth } from "../hooks/useAuth"; */
 import sosData from "../data/sos_list.json";
+import { useFullFeatureEnabled } from "../data/var";
+import Unavailable from "./Unavailable";
 
 const defaultStats: StatsData = {
     total: 0,
@@ -46,6 +48,10 @@ export default function Stats() {
             isMounted = false;
         };
     }, [fetchStats]);
+
+    const isFullFeatureAnable = useFullFeatureEnabled();
+
+    if (!isFullFeatureAnable) return <Unavailable />;
 
     /* const handleResetAll = async () => {
         const firstConfirm = window.confirm(

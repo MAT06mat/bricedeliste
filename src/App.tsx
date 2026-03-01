@@ -1,9 +1,28 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { useAuth } from "./hooks/useAuth";
 import Footer from "./components/Footer";
 import { useEffect } from "react";
-import { syncTimeWithServer } from "./services/timeSync";
+import { ServerOffsetContext, syncTimeWithServer } from "./services/timeSync";
+
+export function SyncTime({ children }: { children: ReactNode }) {
+    const [time, setTime] = useState(0);
+
+    useEffect(() => {
+        async function getTime() {
+            const t = await syncTimeWithServer();
+            console.log(t);
+            if (t < -2000 || t > 2000) setTime(t);
+        }
+        getTime();
+    }, [setTime]);
+
+    return (
+        <ServerOffsetContext.Provider value={time}>
+            {children}
+        </ServerOffsetContext.Provider>
+    );
+}
 
 export default function App() {
     const { isLoggedIn, super_admin, logout, auth } = useAuth();
@@ -15,10 +34,6 @@ export default function App() {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
-
-    useEffect(() => {
-        syncTimeWithServer();
-    }, []);
 
     useEffect(() => {
         pageRef.current?.scrollTo(0, 0);
