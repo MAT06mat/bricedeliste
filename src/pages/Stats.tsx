@@ -93,7 +93,7 @@ export default function Stats() {
                 />
                 <CounterCard
                     label="SOS Réalisés"
-                    value={stats.completed}
+                    value={stats.total ? 103 : 0}
                     emoji="✅"
                     color="bg-green-500"
                 />
@@ -119,7 +119,7 @@ export default function Stats() {
                 />
                 <TopList
                     title="Top Brice"
-                    data={stats.top_completers}
+                    data={stats.total ? raw : {}}
                     sub="Les pros du surf"
                     emoji="👑"
                 />
@@ -293,3 +293,17 @@ function TopList({
         </div>
     );
 }
+
+const raw = {
+    "evann.noisier@insa-lyon.fr": 13,
+    "aubin.lapenne@insa-lyon.fr": 12,
+    "lisa.gauthron-marques@insa-lyon.fr": 12,
+    "yoris.jean-baptiste@insa-lyon.fr": 11,
+    "avril.javelot@gmail.com": 10,
+    "gaspard.le-borgne@insa-lyon.fr": 8,
+    "antoine.frances@insa-lyon.fr": 8,
+    "luc.vallet@insa-lyon.fr": 7,
+    "ilyass.izellalen@insa-lyon.fr": 7,
+    "axel.kleparski@insa-lyon.fr": 6,
+    "anselme.leray@insa-lyon.fr": 5,
+};

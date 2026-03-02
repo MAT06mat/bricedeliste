@@ -159,6 +159,27 @@ export default function OrderForm() {
             return;
         }
 
+        if (formData.email.length > 80) {
+            showToast("Ton email est trop long, raccourcis-le !", "error");
+            return;
+        }
+
+        if (formData.desc.length > 100) {
+            showToast(
+                "Ta description est trop longue, raccourcis-la !",
+                "error",
+            );
+            return;
+        }
+
+        if (formData.targetName.length > 50) {
+            showToast(
+                "Ton nom de cible est trop long, raccourcis-le !",
+                "error",
+            );
+            return;
+        }
+
         if (numberOfSubmissionsToday >= 2) {
             showToast(
                 "Tu as déjà envoyé 2 SOS aujourd'hui ! Reviens demain pour surfer à nouveau.",
