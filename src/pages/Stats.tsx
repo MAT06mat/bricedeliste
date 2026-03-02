@@ -93,7 +93,7 @@ export default function Stats() {
                 />
                 <CounterCard
                     label="SOS Réalisés"
-                    value={stats.total ? 103 : 0}
+                    value={stats.completed + 103}
                     emoji="✅"
                     color="bg-green-500"
                 />
@@ -119,9 +119,10 @@ export default function Stats() {
                 />
                 <TopList
                     title="Top Brice"
-                    data={stats.total ? raw : {}}
+                    data={stats.top_completers}
                     sub="Les pros du surf"
                     emoji="👑"
+                    statName="completers"
                 />
                 <TopList
                     title="Top SOS"
@@ -220,10 +221,25 @@ function TopList({
     statName?: string;
     handleDelete?: (data: string, stat: string) => void;
 }) {
-    if (!data) {
-        data = {};
+    const safeData = data || {};
+
+    let entries: [string, number][];
+
+    if (statName === "completers") {
+        const combined: Record<string, number> = { ...safeData };
+
+        Object.entries(raw).forEach(([email, count]) => {
+            combined[email] = (combined[email] || 0) + count;
+        });
+
+        entries = Object.entries(combined)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10);
+    } else {
+        entries = Object.entries(safeData)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10);
     }
-    const entries = Object.entries(data);
 
     return (
         <div className="vintage-card p-6 rounded-[35px] flex flex-col border-t-4 border-brice-yellow">
@@ -274,7 +290,7 @@ function TopList({
                                 </span>
                                 {handleDelete && (
                                     <button
-                                        className="text-s text-red-600 hover:bg-red-600 hover:scale-120 transition-transform transition-colors rounded-lg bg-red-400"
+                                        className="p-2 text-xs text-white hover:scale-110 transition-transform rounded-lg bg-red-500 shadow-[0_2px_0_0_#991b1b]"
                                         onClick={() =>
                                             handleDelete(
                                                 name,
