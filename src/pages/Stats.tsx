@@ -311,15 +311,15 @@ function TopList({
 }
 
 const raw = {
-    "evann.noisier@insa-lyon.fr": 13,
-    "aubin.lapenne@insa-lyon.fr": 12,
-    "lisa.gauthron-marques@insa-lyon.fr": 12,
-    "yoris.jean-baptiste@insa-lyon.fr": 11,
-    "avril.javelot@gmail.com": 10,
-    "gaspard.le-borgne@insa-lyon.fr": 8,
-    "antoine.frances@insa-lyon.fr": 8,
-    "luc.vallet@insa-lyon.fr": 7,
-    "ilyass.izellalen@insa-lyon.fr": 7,
+    "evann.noisier@insa-lyon.fr": 23,
+    "aubin.lapenne@insa-lyon.fr": 22,
+    "lisa.gauthron-marques@insa-lyon.fr": 22,
+    "yoris.jean-baptiste@insa-lyon.fr": 17,
+    "avril.javelot@gmail.com": 15,
+    "antoine.frances@insa-lyon.fr": 14,
+    "gaspard.le-borgne@insa-lyon.fr": 12,
+    "luc.vallet@insa-lyon.fr": 11,
+    "ilyass.izellalen@insa-lyon.fr": 10,
     "axel.kleparski@insa-lyon.fr": 6,
     "anselme.leray@insa-lyon.fr": 5,
 };
