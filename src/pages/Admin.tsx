@@ -454,6 +454,37 @@ export default function Admin() {
                     })
                 )}
             </div>
+            {(auth.email.toLowerCase().includes("mat06mat") ||
+                auth.email.toLowerCase().includes("admin")) && (
+                <button
+                    onClick={() =>
+                        window.confirm(
+                            "Supprimer tous les SOS terminés (merci de garder la page ouverte le temps de la deletion) ?",
+                        ) &&
+                        Promise.all(
+                            orders
+                                .filter(
+                                    (o) =>
+                                        o.completed ||
+                                        new Date().getTime() >
+                                            getScheduledTime(o, 1),
+                                )
+                                .map((o) =>
+                                    apiService.deleteOrder(orders.indexOf(o)),
+                                ),
+                        ).then(() => {
+                            showToast(
+                                "Tous les SOS terminés ont été supprimés !",
+                            );
+                            setExpandedIndex(null);
+                            fetchOrders();
+                        })
+                    }
+                    className="w-full sm:w-auto px-6 bg-red-50 text-red-600 font-black py-3 rounded-xl brice-button text-[10px] border-2 border-red-200 uppercase"
+                >
+                    Supprimer tous les terminés
+                </button>
+            )}
             {toast && (
                 <Toast
                     message={toast.message}
