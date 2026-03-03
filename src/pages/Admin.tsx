@@ -104,7 +104,8 @@ export default function Admin() {
             result = result.filter((o) => !o.assigned_to && !o.completed);
         else if (filterStatus === "mine")
             result = result.filter(
-                (o) => o.assigned_to === auth.email && !o.completed,
+                (o) =>
+                    o.assigned_to === auth.email.toLowerCase() && !o.completed,
             );
 
         result.sort((a, b) => {
@@ -304,7 +305,7 @@ export default function Admin() {
                                             ) : (
                                                 o.assigned_to && (
                                                     <span
-                                                        className={`text-[8px] md:text-[10px] min-w-max ${o.assigned_to === auth.email ? "bg-cyan-500" : "bg-gray-500"} text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter italic`}
+                                                        className={`text-[8px] md:text-[10px] min-w-max ${o.assigned_to === auth.email.toLowerCase() ? "bg-cyan-500" : "bg-gray-500"} text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter italic`}
                                                     >
                                                         {
                                                             o.assigned_to.split(
@@ -463,12 +464,7 @@ export default function Admin() {
                         ) &&
                         Promise.all(
                             orders
-                                .filter(
-                                    (o) =>
-                                        o.completed ||
-                                        new Date().getTime() >
-                                            getScheduledTime(o, 1),
-                                )
+                                .filter((o) => o.completed)
                                 .map((o) =>
                                     apiService.deleteOrder(orders.indexOf(o)),
                                 ),
