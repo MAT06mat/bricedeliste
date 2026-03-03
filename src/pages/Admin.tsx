@@ -7,7 +7,7 @@ import Toast from "../components/Toast";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 
-type FilterStatus = "all" | "assigned" | "unassigned";
+type FilterStatus = "all" | "assigned" | "unassigned" | "mine";
 type SortKey = "date" | "place" | "type" | "target";
 
 export default function Admin() {
@@ -102,11 +102,19 @@ export default function Admin() {
             result = result.filter((o) => o.assigned_to && !o.completed);
         else if (filterStatus === "unassigned")
             result = result.filter((o) => !o.assigned_to && !o.completed);
+        else if (filterStatus === "mine")
+            result = result.filter(
+                (o) => o.assigned_to === auth.email && !o.completed,
+            );
 
         result.sort((a, b) => {
             const scoreA = getStatusScore(a);
             const scoreB = getStatusScore(b);
             if (scoreA !== scoreB) return scoreA - scoreB;
+
+            const timeA = getScheduledTime(a);
+            const timeB = getScheduledTime(b);
+            if (timeA !== timeB) return timeA - timeB;
 
             if (sortBy === "type") {
                 const typeCmp = a.sosId.localeCompare(b.sosId);
@@ -119,18 +127,11 @@ export default function Admin() {
                 if (placeCmp !== 0) return placeCmp;
             }
 
-            const timeA = getScheduledTime(a);
-            const timeB = getScheduledTime(b);
-            if (timeA !== timeB) return timeA - timeB;
-
-            return (
-                new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime()
-            );
+            return a.targetRoom.localeCompare(b.targetRoom);
         });
 
         return result;
-    }, [orders, filterStatus, sortBy]);
+    }, [auth.email, orders, filterStatus, sortBy]);
 
     if (!isLoggedIn) return null;
 
@@ -157,25 +158,32 @@ export default function Admin() {
             {/* Barre de Filtres (Wrap sur mobile) */}
             <div className="vintage-card p-3 md:p-4 rounded-2xl flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div className="flex w-full sm:w-auto gap-1 md:gap-2">
-                    {(["all", "assigned", "unassigned"] as FilterStatus[]).map(
-                        (s) => (
-                            <button
-                                key={s}
-                                onClick={() => setFilterStatus(s)}
-                                className={`flex-1 sm:flex-none px-3 md:px-4 py-2 rounded-xl text-[10px] md:text-xs font-black uppercase transition-all ${
-                                    filterStatus === s
-                                        ? "bg-amber-900 text-brice-yellow"
-                                        : "bg-amber-100 text-amber-900"
-                                }`}
-                            >
-                                {s === "all"
-                                    ? "Tous"
-                                    : s === "assigned"
-                                      ? "Assignés"
-                                      : "Libres"}
-                            </button>
-                        ),
-                    )}
+                    {(
+                        [
+                            "all",
+                            "unassigned",
+                            "assigned",
+                            "mine",
+                        ] as FilterStatus[]
+                    ).map((s) => (
+                        <button
+                            key={s}
+                            onClick={() => setFilterStatus(s)}
+                            className={`flex-1 sm:flex-none px-3 md:px-4 py-2 rounded-xl text-[10px] md:text-xs font-black uppercase transition-all ${
+                                filterStatus === s
+                                    ? "bg-amber-900 text-brice-yellow"
+                                    : "bg-amber-100 text-amber-900"
+                            }`}
+                        >
+                            {s === "all"
+                                ? "Tous"
+                                : s === "assigned"
+                                  ? "Assignés"
+                                  : s === "mine"
+                                    ? "Mes SOS"
+                                    : "Libres"}
+                        </button>
+                    ))}
                 </div>
                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
                     <span className="text-[10px] font-black uppercase text-amber-700">
@@ -272,7 +280,7 @@ export default function Admin() {
                                                 </span>
 
                                                 <span className="text-[12px] font-black pr-1 py-0.5 text-amber-700">
-                                                    Bât. {o.targetRoom[0]}
+                                                    Bât. {o.targetRoom}
                                                 </span>
                                             </div>
                                             <span className="text-[9px] font-bold text-cyan-700 mt-0.5 uppercase">
@@ -295,8 +303,9 @@ export default function Admin() {
                                                 </span>
                                             ) : (
                                                 o.assigned_to && (
-                                                    <span className="text-[8px] md:text-[10px] min-w-max bg-cyan-500 text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter italic">
-                                                        🏄‍♂️{" "}
+                                                    <span
+                                                        className={`text-[8px] md:text-[10px] min-w-max ${o.assigned_to === auth.email ? "bg-cyan-500" : "bg-gray-500"} text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter italic`}
+                                                    >
                                                         {
                                                             o.assigned_to.split(
                                                                 "@",
