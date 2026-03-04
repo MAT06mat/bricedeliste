@@ -381,7 +381,7 @@ export default function Admin() {
                                         </div>
 
                                         <div className="flex flex-col sm:flex-row gap-2 pt-2">
-                                            {!isCompleted && (
+                                            {!isCompleted && !isExpired && (
                                                 <button
                                                     onClick={() =>
                                                         handleAction(
@@ -431,7 +431,7 @@ export default function Admin() {
                                                     ? "↩️ Remettre en cours"
                                                     : "✅ Marquer Terminé"}
                                             </button>
-                                            {o.completed && (
+                                            {(o.completed || isExpired) && (
                                                 <button
                                                     onClick={() =>
                                                         window.confirm(
