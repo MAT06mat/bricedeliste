@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+/*import { useCallback, useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import sosData from "../data/sos_list.json";
 import { Link } from "react-router";
 import { apiService } from "../services/api";
 import Toast from "../components/Toast";
-import { usePersistedState } from "../hooks/usePersistedState";
+import { usePersistedState } from "../hooks/usePersistedState";*/
+import Unavailable from "./Unavailable";
 
 export default function OrderForm() {
-    const params = new URLSearchParams(window.location.search);
+    /*const params = new URLSearchParams(window.location.search);
     const isLocal = window.location.hostname.includes("localhost");
     const defaultSosId = params.get("id");
 
@@ -213,7 +214,10 @@ export default function OrderForm() {
 
             showToast(errorMessage, "error");
         }
-    };
+    }; */
+
+    return <Unavailable />;
+    /*
 
     if (isSubmitted) {
         return (
@@ -344,13 +348,13 @@ export default function OrderForm() {
                         }
                     />
 
-                    {/* --- CUSTOM DATE & TIME PICKER --- */}
+                    {/* --- CUSTOM DATE & TIME PICKER --- */ /*}
                     <label className="text-xs font-bold uppercase text-amber-700 ml-2">
                         Quand est-ce qu'on casse ?
                     </label>
 
                     <div className="grid grid-cols-1 gap-4">
-                        {/* Day Selection */}
+                        {/* Day Selection */ /*}
                         <div className="flex gap-1">
                             <input
                                 type="date"
@@ -368,7 +372,7 @@ export default function OrderForm() {
                             />
                         </div>
 
-                        {/* Time Selection Slots */}
+                        {/* Time Selection Slots */ /*}
                         <div className="flex flex-col gap-2">
                             <div className="flex flex-wrap justify-between gap-2">
                                 {formData.day &&
@@ -432,7 +436,7 @@ export default function OrderForm() {
                     type={toast.type}
                     onClose={() => setToast(null)}
                 />
-            )}
+            ) }
         </>
-    );
+    );*/
 }
