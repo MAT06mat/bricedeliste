@@ -5,7 +5,7 @@ export default function Unavailable() {
         <div className="min-h-[70vh] flex items-center justify-center md:px-4 animate-in fade-in zoom-in duration-500">
             <div className="max-w-xl w-full vintage-card p-10 px-8 md:p-12 rounded-[50px] border-b-8 border-brice-yellow text-center overflow-hidden">
                 <p className="text-xl md:text-2xl text-amber-800 font-bold italic uppercase tracking-tighter mb-4">
-                    La perdiode de SOS est terminée
+                    La periode de SOS est terminée
                 </p>
                 <p className="text-xl md:text-xl text-amber-800 font-bold italic tracking-tighter mb-4">
                     Ne t'inquiète pas, tu peux toujours profiter de la plage et
