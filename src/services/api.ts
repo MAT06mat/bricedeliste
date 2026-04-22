@@ -1,12 +1,13 @@
-import type { Auth } from "../context/AuthContext";
+/*import type { Auth } from "../context/AuthContext";
 import { API_URL, REGISTER_URL } from "../data/api";
 import type { sos } from "../types/sos";
 import type { StatsData } from "../types/stats";
 import type { User } from "../types/user";
-
+*/
 /**
  * Utility to get auth headers from localStorage
  */
+/*
 const getAuthHeaders = (auth: Auth | undefined = undefined) => {
     if (auth === undefined) {
         auth = JSON.parse(localStorage.getItem("auth") || "{}");
@@ -20,10 +21,12 @@ const getAuthHeaders = (auth: Auth | undefined = undefined) => {
         "Content-Type": "application/json",
     };
 };
-
+*/
 /**
  * Core fetch wrapper with cache busting
  */
+
+/*
 async function request(
     options: { method: string; action?: string; body?: unknown },
     auth: Auth | undefined = undefined,
@@ -55,9 +58,9 @@ async function request(
         console.log("Raw response:", await response.text());
         return null;
     }
-}
+}*/
 
-export const apiService = {
+/*export const apiService = {
     // Get all SOS orders
     getOrders: (
         auth: Auth,
@@ -141,3 +144,4 @@ export const apiService = {
             body: { action: "reset_stat", data, stat },
         }),
 };
+*/

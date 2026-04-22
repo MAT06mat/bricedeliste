@@ -1,75 +1,70 @@
-import { useCallback, useEffect, useState } from "react";
-import { apiService } from "../services/api";
+import { useEffect, useState } from "react";
 import Toast from "../components/Toast";
 import type { StatsData } from "../types/stats";
 import { useAuth } from "../hooks/useAuth";
 import sosData from "../data/sos_list.json";
 import Container from "../components/Container";
 
-const defaultStats: StatsData = {
-    total: 0,
-    completed: 0,
-    top_requesters: {},
-    top_targets: {},
-    top_completers: {},
-    top_types: {},
-};
-
 export default function Stats() {
     const { isLoggedIn, super_admin } = useAuth();
 
     const [modif, setModif] = useState(false);
-    const [stats, setStats] = useState<StatsData>(defaultStats);
     const [toast, setToast] = useState<{
         message: string;
         type: "success" | "error";
     } | null>(null);
 
-    const fetchStats = useCallback(async () => {
-        try {
-            const data = await apiService.getStats();
-            setStats(data);
-        } catch {
-            setToast({
-                message: "Impossible de charger les vagues de stats.",
-                type: "error",
-            });
-        }
-    }, []);
-
-    useEffect(() => {
-        let isMounted = true;
-        const loadData = async () => {
-            if (isMounted) {
-                await fetchStats();
-            }
-        };
-        loadData();
-        return () => {
-            isMounted = false;
-        };
-    }, [fetchStats]);
-
-    const handleDelete = async (data: string, title: string) => {
-        if (
-            window.confirm(
-                `ATTENTION : Tu vas supprimer TOUS les SOS de ${data} dans ${title}. Tu es sûr de vouloir tout casser ?`,
-            )
-        ) {
-            try {
-                await apiService.resetStat(data, title);
-                setToast({
-                    message: "Les statistiques ont été réinitialisées.",
-                    type: "success",
-                });
-                await fetchStats();
-            } catch (err) {
-                setToast({
-                    message: `Erreur lors du reset : ${(err as Error).message}`,
-                    type: "error",
-                });
-            }
-        }
+    const stats: StatsData = {
+        total: 1168,
+        completed: 862,
+        top_requesters: {
+            "samuel.claire-lebon@insa-lyon.fr": 11,
+            "sarah.le-guilloux-le-jeune@insa-lyon.fr": 10,
+            "margot.habegger@insa-lyon.fr": 10,
+            "charlotte.bremeersch@insa-lyon.fr": 10,
+            "noah.bonnier@insa-lyon.fr": 10,
+            "matthieu.felten@insa-lyon.fr": 9,
+            "marc.le-verge-herbin@insa-lyon.fr": 9,
+            "adrien.piche@insa-lyon.fr": 9,
+            "leonie.soulard@insa-lyon.fr": 9,
+            "oihana.etchechury-marin@insa-lyon.fr": 8,
+        },
+        top_targets: {
+            maxime: 10,
+            arthur: 8,
+            "martin lepinasse": 7,
+            margot: 7,
+            "juliette mcphail": 7,
+            "adam denguir": 6,
+            "l\u00e9onie": 5,
+            "yohann bouchara": 5,
+            antonin: 5,
+            "vivien souillet": 5,
+        },
+        top_completers: {
+            "evann.noisier@insa-lyon.fr": 184,
+            "yoris.jean-baptiste@insa-lyon.fr": 113,
+            "avril.javelot@gmail.com": 80,
+            "axel.kleparski@insa-lyon.fr": 78,
+            "mat06mat22@gmail.com": 66,
+            "ryan.gomez@insa-lyon.fr": 56,
+            "marius.arnaud2684@gmail.com": 47,
+            "luc.vallet@insa-lyon.fr": 45,
+            "lisa.gauthron-marques@insa-lyon.fr": 38,
+            "wanyyannlescotcompte@gmail.com": 33,
+        },
+        top_types: {
+            reveil_sirene: 314,
+            planchiglisse: 142,
+            relooking_brice: 110,
+            noyade: 110,
+            concours_surf: 82,
+            casse_de_brice: 80,
+            summer_bodhi: 69,
+            paparazzi: 57,
+            vague_froid: 46,
+            reperage_yellow: 41,
+        },
     };
 
     return (
@@ -107,7 +102,6 @@ export default function Stats() {
                     sub="Ceux qui cassent"
                     emoji="🤘"
                     statName="requesters"
-                    handleDelete={modif ? handleDelete : undefined}
                 />
                 <TopList
                     title="Top Cibles"
@@ -115,7 +109,6 @@ export default function Stats() {
                     sub="Ceux qui mangent"
                     emoji="🎯"
                     statName="targets"
-                    handleDelete={modif ? handleDelete : undefined}
                 />
                 <TopList
                     title="Top Brice"
